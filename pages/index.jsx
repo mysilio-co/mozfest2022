@@ -53,9 +53,9 @@ function getLines(story) {
 function createLineThing(content, payTo, n) {
   return buildThing(createThing({ url: urlForStoryLine(n) }))
     .addUrl(RDF.type, ExquisiteCorpse.Line)
-    .addUrl(SIOC.content, content)
-    .addUrl(WM.PaymentPointer, payTo)
-    .addUrl(DCTERMS.created, Date.now())
+    .addDatetime(DCTERMS.created, Date.now())
+    .addStringNoLocale(SIOC.content, content)
+    .addStringNoLocale(WM.PaymentPointer, payTo)
     .build();
 }
 
@@ -143,39 +143,42 @@ function DisplayStory({ story }) {
   return (
     <>
       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start px-6 py-5">
-        {getLines(story).map(line => <DisplayLine line=)}
-        <div className="mt-1 sm:mt-0 sm:col-span-2 flex flex-col">
-          <p>{getContent(lastLine)}</p>
-        </div>
+        {getLines(story).map((line) => (
+          <DisplayLine line={line} />
+        ))}
       </div>
     </>
   );
 }
 
-export default function IndexPage() {
+export default function ExquisiteCorpse() {
   const { resource: story, saveResource: saveStory } = useResource(StoryUrl);
   const { fullStoryDisplay, setFullStoryDisplay } = useState(false);
 
   const saveAndDisplayStory = async () => {
     await saveStory();
     setFullStoryDisplay(true);
-  }
+  };
 
   return (
-    <div className="mx-auto rounded-lg overflow-hidden bg-white flex flex-col items-stretch">
-      <div className="flex flex-row justify-between self-stretch h-18 p-6 bg-my-green">
-        <div className="flex flex-row justify-start items-start gap-4">
-          <h1 className="text-white font-bold text-xl">
-            Welcome to Exquisite Corpse
-          </h1>
-          <h3>TODO Tani</h3>
+    <main className="min-h-screen bg-gradient-to-r from-my-green via-ocean to-my-purple">
+      <section className="content">
+        <div className="mx-auto rounded-lg overflow-hidden bg-white flex flex-col items-stretch">
+          <div className="flex flex-row justify-between self-stretch h-18 p-6 bg-my-green">
+            <div className="flex flex-row justify-start items-start gap-4">
+              <h1 className="text-white font-bold text-xl">
+                Welcome to Exquisite Corpse
+              </h1>
+              <h3>TODO Tani</h3>
+            </div>
+          </div>
+          {fullStoryDisplay ? (
+            <DisplayStory story={story} />
+          ) : (
+            <AddToStory story={story} saveStory={saveAndDisplayStory} />
+          )}
         </div>
-      </div>
-      {fullStoryDisplay ? (
-        <DisplayStory story={story} />
-      ) : (
-        <AddToStory story={story} saveStory={saveAndDisplayStory} />
-      )}
-    </div>
+      </section>
+    </main>
   );
 }
