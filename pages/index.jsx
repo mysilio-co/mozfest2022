@@ -79,6 +79,7 @@ function addLine(story, content, payTo) {
 
 function AddToStory({ story, saveStory }) {
   const lastLine = getLastLine(story);
+  const lastPayTo = getPayTo(lastLine);
 
   const { payTo, setPayTo } = useState("");
   const { content, setContent } = useState("");
@@ -91,13 +92,14 @@ function AddToStory({ story, saveStory }) {
 
   return (
     <>
+      <Head>
+        {lastPayTo && <meta name="monetization" content={lastPayTo} />}
+      </Head>
       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start px-6 py-5">
         <label className="text-sm font-medium text-gray-900">
           What just happened?
         </label>
-        <div className="mt-1 sm:mt-0 sm:col-span-2 flex flex-col">
-          <h3>{getContent(lastLine)}</h3>
-        </div>
+        <DisplayLine line={lastLine} />
       </div>
       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start px-6 py-5">
         <label className="text-sm font-medium text-gray-900">
@@ -143,11 +145,9 @@ function AddToStory({ story, saveStory }) {
 }
 
 function DisplayLine({ line }) {
-      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start px-6 py-5">
-        <div className="mt-1 sm:mt-0 sm:col-span-2 flex flex-col">
-          <p>{getContent(line)}</p>
-        </div>
-      </div>;
+  <div className="mt-1 sm:mt-0 sm:col-span-2 flex flex-col">
+    <p>{getContent(line)}</p>
+  </div>;
 }
 
 function DisplayStory({ story }) {
