@@ -42,12 +42,23 @@ function getContent(line) {
   return getStringNoLocale(line, SIOC.content);
 }
 
+function getPayTo(line) {
+  return getStringNoLocale(line, WS.paymentPointer);
+}
+
 function getLastLine(story) {
   return Math.max(getLines(story).map(getLineNum))
 }
 
 function getLines(story) {
   return getThingAll(story).filter(t => hasRDFType(t, ExquisiteCorpse.Line))
+}
+
+function getRandomPayTo(story) {
+  const lines = getLines(story);
+  const line = lines[Math.floor(Math.random() * lines.length)];
+  // if there is no paymentPointer on this line for some reason, try again
+  return getPayTo(line) || getPaymentPointer(story);
 }
 
 function createLineThing(content, payTo, n) {
@@ -140,8 +151,12 @@ function DisplayLine({ line }) {
 }
 
 function DisplayStory({ story }) {
+  const payTo = getRandomPayTo(story);
   return (
     <>
+      <Head>
+        {payTo && <meta name="monetization" content={payTo} />}
+      </Head>
       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start px-6 py-5">
         {getLines(story).map((line) => (
           <DisplayLine line={line} />
