@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   buildThing,
   addUrl,
@@ -54,11 +54,13 @@ function getLines(story) {
   return getThingAll(story).filter(t => hasRDFType(t, ExquisiteCorpse.Line))
 }
 
-function getRandomPayTo(story) {
-  const lines = getLines(story);
-  const line = lines[Math.floor(Math.random() * lines.length)];
-  // if there is no paymentPointer on this line for some reason, try again
-  return getPayTo(line) || getPaymentPointer(story);
+function useRandomPayTo(story) {
+  return useMemo(() => {
+    const lines = getLines(story);
+    const line = lines[Math.floor(Math.random() * lines.length)];
+    // if there is no paymentPointer on this line for some reason, try again
+    return getPayTo(line) || getPaymentPointer(story);
+  }, [story]);
 }
 
 function createLineThing(content, payTo, n) {
@@ -151,7 +153,7 @@ function DisplayLine({ line }) {
 }
 
 function DisplayStory({ story }) {
-  const payTo = getRandomPayTo(story);
+  const payTo = useRandomPayTo(story);
   return (
     <>
       <Head>
