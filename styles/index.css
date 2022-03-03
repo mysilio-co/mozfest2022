@@ -1,18 +1,321 @@
 @tailwind base;
-
 /* Write your own custom base styles here */
 
+.link {
+  @apply text-gray-300;
+}
+
+.link:hover {
+  @apply underline;
+}
+
+.link:visited {
+  @apply text-gray-100;
+}
+
+.link:active {
+  @apply text-gray-100;
+}
+
+blockquote {
+  @apply m-2 p-2 bg-gray-100 border-l-2 border-gray-400 text-gray-600;
+}
+
+p {
+  @apply text-lg;
+}
+
+body {
+  @apply font-normal text-lg text-zinc-900;
+}
+
+b,
+strong {
+  @apply font-bold;
+}
+
 /* Start purging... */
+
 @tailwind components;
 /* Stop purging. */
 
 /* Write your own custom component styles here */
-.btn-blue {
-  @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
+
+/* start components from Dylan - https://app.zeplin.io/project/61327f6d0e26559ad2dce006/styleguide */
+
+.btn-md {
+  @apply text-sm px-6 py-2.5;
+}
+
+.btn-emphasis {
+  @apply bg-white text-white bg-opacity-10 ring-1 ring-white ring-inset backdrop-blur-2xl hover:bg-opacity-20 hover:shadow-btn;
+}
+
+.btn-notification {
+  @apply bg-white text-gray-700 hover:bg-gray-100;
+}
+
+.btn-filled {
+  @apply bg-white text-gray-700 ring-1 ring-gray-300 ring-inset hover:bg-gray-100 hover:shadow-btn;
+}
+
+.btn-on-ipt {
+  @apply bg-white text-gray-700 ring-1 ring-gray-300 ring-inset hover:bg-gray-100 rounded-r;
+}
+
+.ipt-with-btn {
+  @apply border-gray-300 focus:border-gray-300 rounded-l py-0 border-r-0 leading-3 focus:ring-0;
+}
+
+.btn-transparent {
+  @apply bg-white text-white bg-opacity-0 hover:bg-opacity-20 hover:ring-1 hover:ring-inset hover:ring-white hover:shadow-btn;
+}
+
+.btn-round {
+  @apply rounded-full;
+}
+
+.btn-square {
+  @apply rounded-lg;
+}
+
+.ipt {
+  @apply rounded-lg border-0 ring-1 ring-gray-300 py-2.5 px-4 text-sm text-gray-800 placeholder-gray-400 focus:ring-gray-300 focus:shadow-ipt-focus;
+}
+
+.ipt.error {
+  @apply ring-ember;
+}
+
+.ipt.success {
+  @apply ring-my-green;
+}
+
+.ipt-header-search {
+  @apply rounded-full ring-0 bg-white bg-opacity-10 text-white placeholder-white placeholder-opacity-40 hover:ring-0 focus:ring-0 focus:shadow-none;
+}
+
+.ipt-header-search-icon {
+  @apply text-white h-5 w-5;
+}
+
+.ipt-error-message {
+  @apply uppercase pl-4 text-sm font-bold text-red-300;
+}
+.menu-item {
+  @apply block text-gray-700 text-sm hover:bg-gray-100 w-full pt-1.5 pb-1.5 text-left px-4;
+}
+
+ /* end components from Dylan - https://app.zeplin.io/project/61327f6d0e26559ad2dce006/styleguide */
+
+.tab-btn {
+  @apply text-xl rounded-lg p-3;
+}
+
+.tab-btn:focus {
+  @apply outline-none;
+}
+
+.tab-btn.active {
+  @apply bg-gray-200;
+}
+
+.image-icon:hover {
+  @apply text-gray-500 cursor-pointer;
+}
+
+.page {
+  @apply bg-white text-zinc-900 h-screen overflow-y-scroll w-screen;
 }
 
 /* Start purging... */
+
 @tailwind utilities;
 /* Stop purging. */
 
-/* Your own custom utilities */
+
+/* slate editor -- classes assigned automatically by Plate */
+.slate-h1 {
+  @apply text-3xl;
+}
+
+.slate-h2 {
+  @apply text-2xl;
+}
+
+.slate-h3 {
+  @apply text-xl;
+}
+
+.slate-ul {
+  @apply list-disc list-outside font-normal text-base;
+}
+
+.slate-ol {
+  @apply list-decimal list-outside font-normal text-base;
+}
+
+.slate-p {
+  @apply font-normal text-base;
+}
+
+.slate-MentionSelect {
+  @apply z-50 !important;
+}
+
+.slate-ToolbarButton-active {
+  @apply text-ocean;
+}
+
+/* hex grid inspired by https://github.com/web-tiki/responsive-grid-of-hexagons/blob/css-grid/hexagons.css */
+
+.grid.hex {
+}
+
+.grid.hex > * {
+  grid-column-end: span 2;
+  position: relative;
+  visibility: hidden;
+  /* fix for jagged edges in FF on hover transition */
+  outline: 1px solid transparent;
+}
+
+.grid.hex > *::after {
+  content: "";
+  display: block;
+  padding-bottom: 86.602%;
+  /* =  100 / tan(60) * 1.5 */
+}
+
+.grid.hex > * > * {
+  position: absolute;
+  width: 100%;
+  padding-bottom: 115.47%;
+  /* =  width / sin(60) */
+  overflow: hidden;
+  visibility: hidden;
+  outline: 1px solid transparent;
+  /* fix for jagged edges in FF on hover transition */
+  -webkit-transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
+  -ms-transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
+  transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
+}
+
+.grid.hex > * > * * {
+  position: absolute;
+  visibility: visible;
+  outline: 1px solid transparent;
+  /* fix for jagged edges in FF on hover transition */
+}
+
+.grid.hex > * > * > * {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  -webkit-transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
+  -ms-transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
+  transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
+}
+
+/* <- 2-1  hexagons per row */
+
+.grid.hex {
+  grid-template-columns: repeat(4, 1fr);
+  padding-bottom: 11.2%;
+}
+
+.grid.hex > *:nth-child(3n + 3) {
+  /* first hexagon of even rows */
+  grid-column-start: 2;
+}
+
+@media screen(sm) {
+  /* <- 3-2  hexagons per row */
+  .grid.hex {
+    grid-template-columns: repeat(6, 1fr);
+    padding-bottom: 7.4%;
+  }
+  .grid.hex > *:nth-child(3n + 3) {
+    grid-column-start: auto;
+  }
+  .grid.hex > *:nth-child(5n + 4) {
+    /* first hexagon of even rows */
+    grid-column-start: 2;
+  }
+}
+
+@media screen(md) {
+  /* <- 4-3  hexagons per row */
+  .grid.hex {
+    grid-template-columns: repeat(8, 1fr);
+    padding-bottom: 5.5%;
+  }
+  .grid.hex > *:nth-child(5n + 4) {
+    grid-column-start: auto;
+  }
+  .grid.hex > *:nth-child(7n + 5) {
+    /* first hexagon of even rows */
+    grid-column-start: 2;
+  }
+}
+
+@media screen(lg) {
+  /* <- 5-4  hexagons per row */
+  .grid.hex {
+    padding-bottom: 4.4%;
+    grid-template-columns: repeat(10, 1fr);
+  }
+  .grid.hex > *:nth-child(7n + 5) {
+    grid-column-start: auto;
+  }
+  .grid.hex > *:nth-child(9n + 6) {
+    /* first hexagon of even rows */
+    grid-column-start: 2;
+  }
+}
+
+.bg-login-gradient {
+  @apply bg-gradient-to-br from-my-green via-ocean to-my-purple;
+}
+
+.bg-header-gradient {
+  @apply bg-gradient-to-r from-my-green via-ocean to-my-purple;
+}
+
+.bg-header-gray-gradient {
+  @apply bg-gradient-to-r from-gray-500 via-ocean to-my-purple;
+}
+
+.tippy-box {
+  @apply relative bg-gray-700 opacity-50;
+}
+
+.tippy-arrow {
+  @apply text-gray-700;
+}
+
+/*
+[data-tippy-root] {
+    max-width: calc(100vw - 10px);
+}
+
+.tippy-box {
+  @apply relative text-sm bg-gray-500 text-white rounded-lg px-2 py-1 transition-transform transition-opacity transition-visibility;
+}
+
+.tippy-content {
+  @apply relative px-1 py-2 z-10;
+}
+
+.tippy-arrow {
+  @apply text-gray-500;
+}
+
+.tippy-box[data-placement^=top]>.tippy-arrow {
+    bottom: 0;
+}
+
+.tippy-arrow {
+  @apply w-4 h-4 text-gray-500;
+}
+*/
