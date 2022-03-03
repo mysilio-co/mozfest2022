@@ -2,8 +2,9 @@ import { useMemo, useState } from "react";
 import Head from 'next/head'
 import {
   buildThing,
-  addUrl,
+  getUrlAll,
   setThing,
+  createThing,
   getThingAll,
   getStringNoLocale,
   asUrl,
@@ -64,15 +65,14 @@ function useRandomPayTo(story) {
   return useMemo(() => {
     const lines = story && getLines(story);
     const line = lines[Math.floor(Math.random() * lines.length)];
-    // if there is no paymentPointer on this line for some reason, try again
-    return getPayTo(line) || getPaymentPointer(story);
+    return getPayTo(line);
   }, [story]);
 }
 
 function createLineThing(content, payTo, n) {
   return buildThing(createThing({ url: urlForStoryLine(n) }))
     .addUrl(RDF.type, EXQ.Line)
-    .addDatetime(DCTERMS.created, Date.now())
+    .addDatetime(DCTERMS.created, new Date())
     .addStringNoLocale(SIOC.content, content)
     .addStringNoLocale(WM.PaymentPointer, payTo)
     .build();
@@ -80,12 +80,9 @@ function createLineThing(content, payTo, n) {
 
 function addLine(story, content, payTo) {
   const prevLine = story && getLastLine(story);
-  const prevNum = story && getLineNum(prevLine);
-  const newLine =
-    story &&
-    content &&
-    payTo &&
-    createLineThing(line, content, payTo, prevNum++);
+  const prevNum = prevLine && getLineNum(prevLine);
+  const nextNum = prevNum ? prevNum++ : 0;
+  const newLine = content && payTo && createLineThing(content, payTo, nextNum);
   return story && setThing(story, newLine);
 }
 
@@ -93,8 +90,8 @@ function AddToStory({ story, saveStory }) {
   const lastLine = getLastLine(story);
   const lastPayTo = getPayTo(lastLine);
 
-  const { payTo, setPayTo } = useState("");
-  const { content, setContent } = useState("");
+  const [ payTo, setPayTo ] = useState("");
+  const [ content, setContent ] = useState("");
   const onSubmit = async () => {
     if (story && content && payTo) {
       const newStory = addLine(story, content, payTo);
@@ -181,11 +178,11 @@ function DisplayStory({ story }) {
 }
 
 export default function ExquisiteCorpse() {
-  const { resource: story, saveResource: saveStory } = useResource(StoryResourceUrl);
+  const { resource, save } = useResource(StoryResourceUrl);
   const { fullStoryDisplay, setFullStoryDisplay } = useState(false);
 
-  const saveAndDisplayStory = async () => {
-    await saveStory();
+  async function saveAndDisplayStory(newStory) {
+    await save(newStory);
     setFullStoryDisplay(true);
   };
 
@@ -202,9 +199,9 @@ export default function ExquisiteCorpse() {
             </div>
           </div>
           {fullStoryDisplay ? (
-            <DisplayStory story={story} />
+            <DisplayStory story={resource} />
           ) : (
-            <AddToStory story={story} saveStory={saveAndDisplayStory} />
+            <AddToStory story={resource} saveStory={saveAndDisplayStory} />
           )}
         </div>
       </section>
