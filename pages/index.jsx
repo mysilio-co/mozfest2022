@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import Head from 'next/head'
 import {
   buildThing,
   addUrl,
@@ -11,13 +12,13 @@ import { useThing, useResource } from "swrlit";
 import { RDF, DCTERMS } from "@inrupt/vocab-common-rdf";
 import { WM, SIOC, EXQ } from "../vocab";
 
-const CollageBaseUrl =
+const CollageResourceUrl =
   "https://exquisite-corpse.mysilio.me/mozfest2022/collage.ttl"; 
-const StoryBaseUrl =
+const StoryResourceUrl =
   "https://exquisite-corpse.mysilio.me/mozfest2022/story.ttl";
 
 function urlForStoryLine(n) {
-  return `${StoryBaseUrl}#${n}`;
+  return `${StoryResourceUrl}#${n}`;
 }
 
 function hasRDFTypes(thing, ts) {
@@ -34,29 +35,34 @@ function hasRDFType(thing, t) {
 }
 
 function getLineNum(line) {
-  const url = new URL(asUrl(line))
-  return parseInt(url.hash)
+  const url = line && new URL(asUrl(line));
+  return url && parseInt(url.hash);
 }
 
 function getContent(line) {
-  return getStringNoLocale(line, SIOC.content);
+  return line && getStringNoLocale(line, SIOC.content);
 }
 
 function getPayTo(line) {
-  return getStringNoLocale(line, WS.paymentPointer);
+  return line && getStringNoLocale(line, WS.paymentPointer);
 }
 
 function getLastLine(story) {
-  return Math.max(getLines(story).map(getLineNum))
+  return story && Math.max(getLines(story).map(getLineNum))
 }
 
 function getLines(story) {
-  return getThingAll(story).filter(t => hasRDFType(t, EXQ.Line))
+  return (
+    story &&
+    getThingAll(story)
+      .filter((t) => hasRDFType(t, EXQ.Line))
+      .sort((a, b) => getLineNum(a) - getLineNum(b))
+  );
 }
 
 function useRandomPayTo(story) {
   return useMemo(() => {
-    const lines = getLines(story);
+    const lines = story && getLines(story);
     const line = lines[Math.floor(Math.random() * lines.length)];
     // if there is no paymentPointer on this line for some reason, try again
     return getPayTo(line) || getPaymentPointer(story);
@@ -73,10 +79,14 @@ function createLineThing(content, payTo, n) {
 }
 
 function addLine(story, content, payTo) {
-  const prevLine = getLastLine(story);
-  const prevNum = getLineNum(prevLine);
-  const newLine = createLineThing(line, content, payTo, prevNum++);
-  return setThing(story, newLine);
+  const prevLine = story && getLastLine(story);
+  const prevNum = story && getLineNum(prevLine);
+  const newLine =
+    story &&
+    content &&
+    payTo &&
+    createLineThing(line, content, payTo, prevNum++);
+  return story && setThing(story, newLine);
 }
 
 function AddToStory({ story, saveStory }) {
@@ -147,9 +157,11 @@ function AddToStory({ story, saveStory }) {
 }
 
 function DisplayLine({ line }) {
-  <div className="mt-1 sm:mt-0 sm:col-span-2 flex flex-col">
-    <p>{getContent(line)}</p>
-  </div>;
+  return (
+    <div className="mt-1 sm:mt-0 sm:col-span-2 flex flex-col">
+      <p>{getContent(line)}</p>
+    </div>
+  );
 }
 
 function DisplayStory({ story }) {
@@ -169,7 +181,7 @@ function DisplayStory({ story }) {
 }
 
 export default function ExquisiteCorpse() {
-  const { resource: story, saveResource: saveStory } = useResource(StoryUrl);
+  const { resource: story, saveResource: saveStory } = useResource(StoryResourceUrl);
   const { fullStoryDisplay, setFullStoryDisplay } = useState(false);
 
   const saveAndDisplayStory = async () => {
