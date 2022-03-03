@@ -43,7 +43,7 @@ function hasRDFType(thing, t) {
 
 function getLineNum(line) {
   const url = line && new URL(asUrl(line));
-  return url && parseInt(url.hash);
+  return url && parseInt(url.hash.substring(1));
 }
 
 function getContent(line) {
