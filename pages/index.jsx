@@ -22,11 +22,17 @@ function urlForStoryLine(n) {
   return `${StoryResourceUrl}#${n}`;
 }
 
+function isLiteralTerm(s) {
+  return typeof s === "string" || s instanceof String;
+}
+
 function hasRDFTypes(thing, ts) {
   const types = getUrlAll(thing, RDF.type);
+  console.log(types);
   let hasAllTypes = true;
   for (let t of ts) {
-    hasAllTypes = hasAllTypes && types.includes(t);
+    const s = isLiteralTerm(t) ? t : t.value;
+    hasAllTypes = hasAllTypes && types.includes(s);
   }
   return hasAllTypes;
 }
