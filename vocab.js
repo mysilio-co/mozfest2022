@@ -1,6 +1,6 @@
 import namespace from '@rdf-esm/namespace'
 
-const wm = namespace("http://paymentpointers.org/ns#PaymentPointer");
+const wm = namespace("http://paymentpointers.org/ns#");
 export const WM = {
   // WebMonetization
   PaymentPointer: wm`PaymentPointer` 
