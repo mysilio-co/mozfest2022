@@ -9,7 +9,7 @@ import {
 } from "@inrupt/solid-client";
 import { useThing, useResource } from "swrlit";
 import { RDF, DCTERMS } from "@inrupt/vocab-common-rdf";
-import { WM, SIOC, ExquisiteCorpse} from "../vocab"
+import { WM, SIOC, EXQ } from "../vocab";
 
 const CollageBaseUrl =
   "https://exquisite-corpse.mysilio.me/mozfest2022/collage.ttl"; 
@@ -51,7 +51,7 @@ function getLastLine(story) {
 }
 
 function getLines(story) {
-  return getThingAll(story).filter(t => hasRDFType(t, ExquisiteCorpse.Line))
+  return getThingAll(story).filter(t => hasRDFType(t, EXQ.Line))
 }
 
 function useRandomPayTo(story) {
@@ -65,7 +65,7 @@ function useRandomPayTo(story) {
 
 function createLineThing(content, payTo, n) {
   return buildThing(createThing({ url: urlForStoryLine(n) }))
-    .addUrl(RDF.type, ExquisiteCorpse.Line)
+    .addUrl(RDF.type, EXQ.Line)
     .addDatetime(DCTERMS.created, Date.now())
     .addStringNoLocale(SIOC.content, content)
     .addStringNoLocale(WM.PaymentPointer, payTo)

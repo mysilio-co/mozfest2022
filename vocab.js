@@ -12,6 +12,6 @@ export const SIOC = {
 };
 
 const exq = namespace( "https://vocab.mysilio.com/my/art/exquisite-corpse#")
-export const ExquisiteCorpse = {
+export const EXQ = {
   Line: exq`Line`,
 };
