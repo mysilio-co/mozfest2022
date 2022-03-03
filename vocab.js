@@ -1,4 +1,4 @@
-import namespace from '@rdfjs/namespace'
+import namespace from '@rdf-esm/namespace'
 
 const wm = namespace("http://paymentpointers.org/ns#PaymentPointer");
 export const WM = {
