@@ -28,7 +28,6 @@ function isLiteralTerm(s) {
 
 function hasRDFTypes(thing, ts) {
   const types = getUrlAll(thing, RDF.type);
-  console.log(types);
   let hasAllTypes = true;
   for (let t of ts) {
     const s = isLiteralTerm(t) ? t : t.value;
@@ -51,15 +50,16 @@ function getContent(line) {
 }
 
 function getPayTo(line) {
-  return line && getStringNoLocale(line, WS.paymentPointer);
+  return line && getStringNoLocale(line, WM.PaymentPointer);
 }
 
 function getLastLine(story) {
-  const lines = getLines(story)
-  const lastLineNum = lines && Math.max(lines.map(getLineNum));
-  return (
-    story && lastLineNum && lines.find((l) => getLineNum(l) === lastLineNum)
-  );
+  const lines = story && getLines(story);
+  const lineNums = lines && lines.map(getLineNum);
+  const lastLineNum =
+    lines && lineNums.length > 0 && Math.max(...lineNums);
+  const lastLine = story && lines.find((l) => getLineNum(l) === lastLineNum);
+  return lastLine;
 }
 
 function getLines(story) {
@@ -91,7 +91,7 @@ function createLineThing(content, payTo, n) {
 function addLine(story, content, payTo) {
   const prevLine = story && getLastLine(story);
   const prevNum = prevLine && getLineNum(prevLine);
-  const nextNum = prevNum ? prevNum++ : 0;
+  const nextNum = prevNum >= 0 ? prevNum + 1 : 0;
   const newLine = content && payTo && createLineThing(content, payTo, nextNum);
   return story && setThing(story, newLine);
 }
@@ -189,7 +189,7 @@ function DisplayStory({ story }) {
 
 export default function ExquisiteCorpse() {
   const { resource, save } = useResource(StoryResourceUrl);
-  const { fullStoryDisplay, setFullStoryDisplay } = useState(false);
+  const [ fullStoryDisplay, setFullStoryDisplay ] = useState(false);
 
   async function saveAndDisplayStory(newStory) {
     await save(newStory);
