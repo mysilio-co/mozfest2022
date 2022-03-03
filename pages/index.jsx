@@ -55,7 +55,11 @@ function getPayTo(line) {
 }
 
 function getLastLine(story) {
-  return story && Math.max(getLines(story).map(getLineNum))
+  const lines = getLines(story)
+  const lastLineNum = lines && Math.max(lines.map(getLineNum));
+  return (
+    story && lastLineNum && lines.find((l) => getLineNum(l) === lastLineNum)
+  );
 }
 
 function getLines(story) {
