@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import {
   buildThing,
-  getUrlAll,
   setThing,
   createThing,
   getThingAll,
@@ -11,30 +10,13 @@ import {
 import { RDF, DCTERMS } from "@inrupt/vocab-common-rdf";
 import { WM, SIOC, EXQ } from "../vocab";
 import { useResource } from "swrlit";
+import { hasRDFType } from "../model/utils";
 
 const StoryResourceUrl =
   "https://exquisite-corpse.mysilio.me/mozfest2022/story.ttl";
 
 export function urlForStoryLine(n) {
   return `${StoryResourceUrl}#${n}`;
-}
-
-export function isLiteralTerm(s) {
-  return typeof s === "string" || s instanceof String;
-}
-
-export function hasRDFTypes(thing, ts) {
-  const types = getUrlAll(thing, RDF.type);
-  let hasAllTypes = true;
-  for (let t of ts) {
-    const s = isLiteralTerm(t) ? t : t.value;
-    hasAllTypes = hasAllTypes && types.includes(s);
-  }
-  return hasAllTypes;
-}
-
-export function hasRDFType(thing, t) {
-  return hasRDFTypes(thing, [t]);
 }
 
 export function getLineNum(line) {
@@ -46,7 +28,7 @@ export function getContent(line) {
   return line && getStringNoLocale(line, SIOC.content);
 }
 
-export function getPayTo(line) {
+export function getMonetization(line) {
   return line && getStringNoLocale(line, WM.PaymentPointer);
 }
 
@@ -67,28 +49,28 @@ export function getLines(story) {
   );
 }
 
-export function createLineThing(content, payTo, n) {
+export function createLineThing(content, monetization, n) {
   return buildThing(createThing({ url: urlForStoryLine(n) }))
     .addUrl(RDF.type, EXQ.Line)
     .addDatetime(DCTERMS.created, new Date())
     .addStringNoLocale(SIOC.content, content)
-    .addStringNoLocale(WM.PaymentPointer, payTo)
+    .addStringNoLocale(WM.PaymentPointer, monetization)
     .build();
 }
 
-export function addLine(story, content, payTo) {
+export function addLine(story, content, monetization) {
   const prevLine = story && getLastLine(story);
   const prevNum = prevLine && getLineNum(prevLine);
   const nextNum = prevNum >= 0 ? prevNum + 1 : 0;
-  const newLine = content && payTo && createLineThing(content, payTo, nextNum);
+  const newLine = content && monetization && createLineThing(content, monetization, nextNum);
   return story && setThing(story, newLine);
 }
 
-export function useRandomPayment(story) {
+export function useRandomMonetization(story) {
   return useMemo(() => {
     const lines = story && getLines(story);
     const line = lines[Math.floor(Math.random() * lines.length)];
-    return getPayTo(line);
+    return getMonetization(line);
   }, [story]);
 }
 

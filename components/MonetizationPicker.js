@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import { Combobox } from "@headlessui/react";
 
-export const PaymentPointers = [
+export const MonetizationPointers = [
   { name: "Mysilio", pointer: "$ilp.uphold.com/DYPhbXPmDa2P" },
   { name: "Defold Foundation", pointer: "$ilp.uphold.com/QkG86UgXzKq8" },
   { name: "freeCodeCamp", pointer: "$ilp.uphold.com/LJmbPn7WD4JB" },
@@ -25,14 +25,14 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export function PaymentPicker({ setPayment }) {
+export function MonetizationPicker({ setMonetization }) {
   const [query, setQuery] = useState("");
   const [selectedPP, setSelectedPP] = useState();
 
   const filteredPointers =
     query === ""
-      ? PaymentPointers
-      : PaymentPointers.filter((pp) => {
+      ? MonetizationPointers
+      : MonetizationPointers.filter((pp) => {
           return pp.name.toLowerCase().includes(query.toLowerCase());
         });
 
@@ -42,11 +42,11 @@ export function PaymentPicker({ setPayment }) {
       value={selectedPP}
       onChange={(pp) => {
         setSelectedPP(pp);
-        setPayment(pp.pointer);
+        setMonetization(pp.pointer);
       }}
     >
       <Combobox.Label className="block text-sm font-medium text-gray-700">
-        Choose a Payment Pointer
+        Choose a Web Monetization Pointer
       </Combobox.Label>
       <div className="relative mt-1">
         <Combobox.Input

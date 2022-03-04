@@ -1,3 +1,24 @@
+import { RDF } from "@inrupt/vocab-common-rdf";
+import { getUrlAll } from "@inrupt/solid-client";
+
+export function isLiteralTerm(s) {
+  return typeof s === "string" || s instanceof String;
+}
+
+export function hasRDFTypes(thing, ts) {
+  const types = getUrlAll(thing, RDF.type);
+  let hasAllTypes = true;
+  for (let t of ts) {
+    const s = isLiteralTerm(t) ? t : t.value;
+    hasAllTypes = hasAllTypes && types.includes(s);
+  }
+  return hasAllTypes;
+}
+
+export function hasRDFType(thing, t) {
+  return hasRDFTypes(thing, [t]);
+}
+
 export function useLocalStorage(key, initialValue) {
   // State to store our value
   // Pass initial state function to useState so logic is only executed once

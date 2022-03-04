@@ -2,23 +2,23 @@ import { useState } from "react";
 import Head from "next/head";
 import {
   getLastLine,
-  getPayTo,
-  useRandomPayment,
+  getMonetization,
+  useRandomMonetization,
   addLine,
   getLines,
   getContent,
 } from "../model/story";
-import { PaymentPicker } from "./PaymentPicker";
+import { MonetizationPicker } from "./MonetizationPicker";
 
 export function AddToStory({ story, saveStory }) {
   const lastLine = getLastLine(story);
-  const lastPayTo = getPayTo(lastLine);
+  const lastMonetization = getMonetization(lastLine);
 
-  const [payment, setPayment] = useState("");
+  const [monetization, setMonetization] = useState("");
   const [content, setContent] = useState("");
   const onSubmit = async () => {
-    if (story && content && payment) {
-      const newStory = addLine(story, content, payment);
+    if (story && content && monetization) {
+      const newStory = addLine(story, content, monetization);
       await saveStory(newStory);
     }
   };
@@ -26,7 +26,7 @@ export function AddToStory({ story, saveStory }) {
   return (
     <>
       <Head>
-        {lastPayTo && <meta name="monetization" content={lastPayTo} />}
+        {lastMonetization && <meta name="monetization" content={lastMonetization} />}
       </Head>
       <DisplayLine line={lastLine} />
       <label
@@ -45,7 +45,7 @@ export function AddToStory({ story, saveStory }) {
           onChange={(e) => setContent(e.target.value)}
         />
       </div>
-      <PaymentPicker setPayment={setPayment} />
+      <MonetizationPicker setMonetization={setMonetization} />
       <div className="h-20 flex flex-row justify-end items-center px-6">
         <button
           type="submit"
@@ -66,10 +66,10 @@ export function DisplayLine({ line }) {
 }
 
 export function DisplayStory({ story }) {
-  const payment = useRandomPayment(story);
+  const monetization = useRandomMonetization(story);
   return (
     <>
-      <Head>{payment && <meta name="monetization" content={payment} />}</Head>
+      <Head>{monetization && <meta name="monetization" content={monetization} />}</Head>
       {getLines(story).map((line) => (
         <DisplayLine line={line} />
       ))}
