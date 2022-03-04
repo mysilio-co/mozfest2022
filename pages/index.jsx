@@ -88,10 +88,10 @@ export default function ExquisiteIntro() {
               </h1>
               <p className="mt-8 text-xl text-gray-500 leading-8">
                 Welcome to Exquisite Story, a Web Monetized, interactive
-                exquisite corpse game.{" "}
+                exquisite corpse game.&nbsp;
                 <a href="https://en.wikipedia.org/wiki/Exquisite_corpse">
                   Exquisite Corpse
-                </a>{" "}
+                </a>&nbsp;
                 is a game invented 100 years ago by the surrealist writer Andre
                 Breton, and has since grown to take a number of forms, like this
                 one.
@@ -101,7 +101,7 @@ export default function ExquisiteIntro() {
               <h2>What is Exquisite Story?</h2>
               <p>
                 A collaborative storytelling experience. Want a more visual
-                storytelling experience?{" "}
+                storytelling experience?&nbsp;
                 <Link href="/collage">
                   <a>Check out Exquisite Collage</a>
                 </Link>
@@ -130,7 +130,7 @@ export default function ExquisiteIntro() {
               <p>
                 Web Monetization is a proposed API standard that enables website
                 visitors with the ability to stream micropayments to content
-                creators{" "}
+                creators&nbsp;
                 <a href="https://webmonetization.org/docs/explainer/">
                   https://webmonetization.org/docs/explainer/
                 </a>
