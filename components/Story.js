@@ -28,44 +28,32 @@ export function AddToStory({ story, saveStory }) {
       <Head>
         {lastPayTo && <meta name="monetization" content={lastPayTo} />}
       </Head>
-      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start px-6 py-5">
-        <label className="text-sm font-medium text-gray-900">
-          What just happened?
-        </label>
-        <DisplayLine line={lastLine} />
+      <DisplayLine line={lastLine} />
+      <label
+        htmlFor="comment"
+        className="block text-sm font-medium text-gray-700"
+      >
+        Add the next line
+      </label>
+      <div className="mt-1">
+        <textarea
+          rows={4}
+          name="nextLine"
+          id="nextLine"
+          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-xl"
+          defaultValue={""}
+          onChange={(e) => setContent(e.target.value)}
+        />
       </div>
-      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start px-6 py-5">
-        <label className="text-sm font-medium text-gray-900">
-          What happens next?
-        </label>
-        <div className="mt-1 sm:mt-0 sm:col-span-2 flex flex-col">
-          <textarea
-            type="text"
-            name="nextLine"
-            id="nextLine"
-            className="ipt"
-            onChange={(e) => setContent(e.target.value)}
-          />
-        </div>
-      </div>
-      <div className="divide-1 divide-gray-100">
-        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start px-6 py-5">
-          <label htmlFor="url" className="text-sm font-medium text-gray-900">
-            Who should we monetize this for? (Input a Payment Pointer)
-          </label>
-          <div className="mt-1 sm:mt-0 sm:col-span-2 flex flex-col">
-            <PaymentPicker setPayment={setPayment} />
-          </div>
-        </div>
-        <div className="h-20 bg-gray-50 flex flex-row justify-end items-center px-6">
-          <button
-            type="submit"
-            className="btn-md btn-filled btn-square h-10 ring-my-green text-my-green flex flex-row justify-center items-center"
-            onClick={onSubmit}
-          >
-            Add to the story
-          </button>
-        </div>
+      <PaymentPicker setPayment={setPayment} />
+      <div className="h-20 flex flex-row justify-end items-center px-6">
+        <button
+          type="submit"
+          className="btn-md btn-filled btn-square h-10 ring-my-green text-my-green flex flex-row justify-center items-center"
+          onClick={onSubmit}
+        >
+          Submit
+        </button>
       </div>
     </>
   );
@@ -73,9 +61,7 @@ export function AddToStory({ story, saveStory }) {
 
 export function DisplayLine({ line }) {
   return (
-    <div className="mt-1 sm:mt-0 sm:col-span-2 flex flex-col">
-      <p>{getContent(line)}</p>
-    </div>
+    <p className="mt-8 text-xl text-gray-500 leading-8">{getContent(line)}</p>
   );
 }
 
@@ -84,11 +70,9 @@ export function DisplayStory({ story }) {
   return (
     <>
       <Head>{payment && <meta name="monetization" content={payment} />}</Head>
-      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start px-6 py-5">
-        {getLines(story).map((line) => (
-          <DisplayLine line={line} />
-        ))}
-      </div>
+      {getLines(story).map((line) => (
+        <DisplayLine line={line} />
+      ))}
     </>
   );
 }

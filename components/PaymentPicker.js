@@ -1,6 +1,6 @@
-import { Fragment, useState } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/solid";
+import { useState } from "react";
+import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
+import { Combobox } from "@headlessui/react";
 
 export const PaymentPointers = [
   { name: "Mysilio", pointer: "$ilp.uphold.com/DYPhbXPmDa2P" },
@@ -21,60 +21,94 @@ export const PaymentPointers = [
   },
 ];
 
-export function PaymentPicker({ setPayment }) {
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 
-  const [index, setIndex] = useState(0);
-  const pointers = PaymentPointers.map(({ name, pointer }) => {
-    return { name, pointer, title: `${name} - ${pointer}` };
-  });
+export function PaymentPicker({ setPayment }) {
+  const [query, setQuery] = useState("");
+  const [selectedPP, setSelectedPP] = useState();
+
+  const filteredPointers =
+    query === ""
+      ? PaymentPointers
+      : PaymentPointers.filter((pp) => {
+          return pp.name.toLowerCase().includes(query.toLowerCase());
+        });
 
   return (
-    <Menu as="div" className="relative inline-block text-left">
-      <div>
-        <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
-          {pointers[index].title}
-          <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
-        </Menu.Button>
-      </div>
+    <Combobox
+      as="div"
+      value={selectedPP}
+      onChange={(pp) => {
+        setSelectedPP(pp);
+        setPayment(pp.pointer);
+      }}
+    >
+      <Combobox.Label className="block text-sm font-medium text-gray-700">
+        Choose a Payment Pointer
+      </Combobox.Label>
+      <div className="relative mt-1">
+        <Combobox.Input
+          className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+          onChange={(event) => setQuery(event.target.value)}
+          displayValue={(pp) => pp.name}
+        />
+        <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
+          <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+        </Combobox.Button>
 
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <div className="py-1">
-            {pointers.map((pp, index) => {
-              return (
-                <Menu.Item key={pp.title}>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                        "block px-4 py-2 text-sm"
-                      )}
-                      onClick={() => {
-                        setIndex(index);
-                        setPayment(pp.pointer);
-                      }}
-                    >
-                      {pp.title}
-                    </a>
-                  )}
-                </Menu.Item>
-              );
-            })}
-          </div>
-        </Menu.Items>
-      </Transition>
-    </Menu>
+        {filteredPointers.length > 0 && (
+          <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            {filteredPointers.map((pp) => (
+              <Combobox.Option
+                key={pp.name}
+                value={pp}
+                className={({ active }) =>
+                  classNames(
+                    "relative cursor-default select-none py-2 pl-3 pr-9",
+                    active ? "bg-indigo-600 text-white" : "text-gray-900"
+                  )
+                }
+              >
+                {({ active, selected }) => (
+                  <>
+                    <div className="flex">
+                      <span
+                        className={classNames(
+                          "truncate",
+                          selected && "font-semibold"
+                        )}
+                      >
+                        {pp.name}
+                      </span>
+                      <span
+                        className={classNames(
+                          "ml-2 truncate text-gray-500",
+                          active ? "text-indigo-200" : "text-gray-500"
+                        )}
+                      >
+                        {pp.pointer}
+                      </span>
+                    </div>
+
+                    {selected && (
+                      <span
+                        className={classNames(
+                          "absolute inset-y-0 right-0 flex items-center pr-4",
+                          active ? "text-white" : "text-indigo-600"
+                        )}
+                      >
+                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                      </span>
+                    )}
+                  </>
+                )}
+              </Combobox.Option>
+            ))}
+          </Combobox.Options>
+        )}
+      </div>
+    </Combobox>
   );
 }
