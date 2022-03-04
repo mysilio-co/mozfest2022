@@ -84,7 +84,7 @@ export function addLine(story, content, payTo) {
   return story && setThing(story, newLine);
 }
 
-export function useRandomPayTo(story) {
+export function useRandomPayment(story) {
   return useMemo(() => {
     const lines = story && getLines(story);
     const line = lines[Math.floor(Math.random() * lines.length)];

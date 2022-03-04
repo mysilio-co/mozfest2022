@@ -1,23 +1,24 @@
 import { useState } from "react";
-import Head from 'next/head'
+import Head from "next/head";
 import {
   getLastLine,
   getPayTo,
-  useRandomPayTo,
+  useRandomPayment,
   addLine,
   getLines,
   getContent,
 } from "../model/story";
+import { PaymentPicker } from "./PaymentPicker";
 
 export function AddToStory({ story, saveStory }) {
   const lastLine = getLastLine(story);
   const lastPayTo = getPayTo(lastLine);
 
-  const [ payTo, setPayTo ] = useState("");
-  const [ content, setContent ] = useState("");
+  const [payment, setPayment] = useState("");
+  const [content, setContent] = useState("");
   const onSubmit = async () => {
-    if (story && content && payTo) {
-      const newStory = addLine(story, content, payTo);
+    if (story && content && payment) {
+      const newStory = addLine(story, content, payment);
       await saveStory(newStory);
     }
   };
@@ -53,13 +54,7 @@ export function AddToStory({ story, saveStory }) {
             Who should we monetize this for? (Input a Payment Pointer)
           </label>
           <div className="mt-1 sm:mt-0 sm:col-span-2 flex flex-col">
-            <input
-              type="text"
-              name="payment"
-              id="payment"
-              className="ipt"
-              onChange={(e) => setPayTo(e.target.value)}
-            />
+            <PaymentPicker setPayment={setPayment} />
           </div>
         </div>
         <div className="h-20 bg-gray-50 flex flex-row justify-end items-center px-6">
@@ -85,12 +80,10 @@ export function DisplayLine({ line }) {
 }
 
 export function DisplayStory({ story }) {
-  const payTo = useRandomPayTo(story);
+  const payment = useRandomPayment(story);
   return (
     <>
-      <Head>
-        {payTo && <meta name="monetization" content={payTo} />}
-      </Head>
+      <Head>{payment && <meta name="monetization" content={payment} />}</Head>
       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start px-6 py-5">
         {getLines(story).map((line) => (
           <DisplayLine line={line} />
