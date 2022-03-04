@@ -13,5 +13,6 @@ export const SIOC = {
 
 const exq = namespace( "https://vocab.mysilio.com/my/art/exquisite-corpse#")
 export const EXQ = {
-  Line: exq`Line`,
+  Line: exq`Line`, // A Line in an Exquisite Story
+  Tile: exq`Tile`, // A Tile in an Exquisite Collage
 };
