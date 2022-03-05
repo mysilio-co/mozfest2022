@@ -8,11 +8,10 @@ import {
   getLines,
   getContent,
 } from "../model/story";
-import { MonetizationPicker } from "./MonetizationPicker";
+import { MonetizationPicker, MysilioPointer } from "./MonetizationPicker";
 
 export function AddToStory({ story, saveStory }) {
   const lastLine = getLastLine(story);
-  const lastMonetization = getMonetization(lastLine);
 
   const [monetization, setMonetization] = useState("");
   const [content, setContent] = useState("");
@@ -26,7 +25,7 @@ export function AddToStory({ story, saveStory }) {
   return (
     <>
       <Head>
-        {lastMonetization && <meta name="monetization" content={lastMonetization} />}
+        <meta name="monetization" content={MysilioPointer} />
       </Head>
       <h3 className="text-3xl mb-10">The story so far ends with:</h3>
       <span className="mt-8 text-xl text-gray-700 leading-8">

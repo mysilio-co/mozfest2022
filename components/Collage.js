@@ -1,45 +1,51 @@
 import { useState } from "react";
 import Head from "next/head";
-import { getAllTiles, getImage, useRandomMonetization } from "../model/collage";
-import { MonetizationPicker } from "./MonetizationPicker";
-
+import { getAllTiles, getImage, useRandomMonetization, getMonetization, getVisibleTiles, getCoordinates } from "../model/collage";
+import { MonetizationPicker, MysilioPointer} from "./MonetizationPicker";
 
 export function AddToCollage({ collage, saveCollage}) {
-  const lastLine = getLastLine(story);
-  const lastMonetization = getMonetization(lastLine);
+  const { x, y } = useMaxCoordinates(collage);
 
   const [monetization, setMonetization] = useState("");
-  const [content, setContent] = useState("");
+  const [image, setImage] = useState("");
+  const [coordinates, setCoordinates] = useState(undefined);
+
+  const openModal = () => {
+    setCoordinates({ x, y });
+  }
+
+
+  const closeModal = () => {
+
+  }
+
+
   const onSubmit = async () => {
-    if (story && content && monetization) {
-      const newStory = addLine(story, content, monetization);
-      await saveStory(newStory);
+    if (collage && image && monetization && coordinates) {
+      const newCollage = addTile(collage, image, monetization, coordinates);
+      await saveCollage(newCollage);
     }
   };
 
   return (
     <>
       <Head>
-        {lastMonetization && <meta name="monetization" content={lastMonetization} />}
+        <meta name="monetization" content={MysilioPointer} />
       </Head>
-      <DisplayLine line={lastLine} />
-      <label
-        htmlFor="comment"
-        className="block text-sm font-medium text-gray-700"
-      >
-        Add the next line
-      </label>
-      <div className="mt-1">
-        <textarea
-          rows={4}
-          name="nextLine"
-          id="nextLine"
-          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-xl"
-          defaultValue={""}
-          onChange={(e) => setContent(e.target.value)}
-        />
-      </div>
       <MonetizationPicker setMonetization={setMonetization} />
+      <div class={`grid grid-cols-${x + 1} grid-rows-${y + 1}`}>
+        {getVisibleTiles(collage).map((tile) => (
+          <DisplayTile tile={tile} />
+        ))}
+        {getHiddenTiles(collage).map((tile) => (
+          <DisplayTile className="blur" tile={tile} />
+        ))}
+        {getAddTileCoordinates(collage)
+          .values()
+          .map(({ x, y }) => (
+            <ImageUploadTile x={x} y={y} />
+          ))}
+      </div>
       <div className="h-20 flex flex-row justify-end items-center px-6">
         <button
           type="submit"
@@ -53,22 +59,43 @@ export function AddToCollage({ collage, saveCollage}) {
   );
 }
 
-export function DisplayTile({ tile }) {
+export function ImageUploadTile({x, y, openModal}) {
   return (
-    <img src={getImage(tile)}></img>
+    <div className={`col-start-${x} row-start-${y}`}>
+      <button className="text-4xl" onClick={() => openModal({x, y})}>
+        +
+      </button>
+    </div>
+  )
+}
+
+export function UploadImageModal() {
+
+}
+
+export function DisplayTile({ tile }) {
+  const { x, y } = getCoordinates(tile);
+  return (
+    <div className={`col-start-${x} row-start-${y}`}>
+      <img src={getImage(tile)} />
+    </div>
   );
 }
 
 export function DisplayCollage({ collage }) {
   const monetization = useRandomMonetization(collage);
+  const { x, y } = useMaxCoordinates(collage);
+
   return (
     <>
       <Head>
         {monetization && <meta name="monetization" content={monetization} />}
       </Head>
-      {getAllTiles(collage).map((tile) => (
-        <DisplayTile tile={tile} />
-      ))}
+      <div className={`grid grid-cols-${x} grid-rows-${y}`}>
+        {getAllTiles(collage).map((tile) => (
+          <DisplayTile tile={tile} />
+        ))}
+      </div>
     </>
   );
 }

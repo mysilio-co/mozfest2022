@@ -61,7 +61,15 @@ export function isVisible(collage, tile) {
 }
 
 export function getVisibleTiles(collage) {
-  return collage && getAllTiles(collage).filter(isVisible);
+  return (
+    collage && getAllTiles(collage).filter((tile) => isVisible(collage, tile))
+  );
+}
+
+export function getHiddenTiles(collage) {
+  return (
+    collage && getAllTiles(collage).filter((tile) => !isVisible(collage, tile))
+  );
 }
 
 export function createTileThing(img, monetization, coordinates) {
@@ -73,20 +81,20 @@ export function createTileThing(img, monetization, coordinates) {
     .build();
 }
 
-export function getNeighbors({x, y}) {
+export function getNeighbors({ x, y }) {
   return [
-    {x: x+1, y},
-    {x, y: y+1},
-    {x: x-1, y},
-    {x, y: y-1}
-  ]
+    { x: x + 1, y },
+    { x, y: y + 1 },
+    // {x: x-1, y},
+    // {x, y: y-1},
+  ];
 }
 
-export function getValidTileCoordinates(collage) {
+export function getAddTileCoordinates(collage) {
   if (!collage) return undefined
 
   const validTiles = new Set()
-  for (const tile of getTiles(collage)) {
+  for (const tile of getAllTiles(collage)) {
     const neighbors = getNeighbors(getCoordinates(tile))
     for (const loc of neighbors) {
       if (!getTile(collage, loc)) {
@@ -100,7 +108,7 @@ export function getValidTileCoordinates(collage) {
 export function addTile(collage, img, monetization, coordinates) {
   if (!collage || !img || !monetization || !coordinates) return undefined;
 
-  const valid = getValidTileCoordinates(collage)
+  const valid = getAddTileCoordinates(collage)
   if (!valid.has(coordinates)) {
     throw new Error("Can only create new Tiles next to an existing Tile");
   }
@@ -111,7 +119,7 @@ export function addTile(collage, img, monetization, coordinates) {
 
 export function useRandomMonetization(collage) {
   return useMemo(() => {
-    const tiles = collage && getTiles(collage);
+    const tiles = collage && getAllTiles(collage);
     const tile = tiles[Math.floor(Math.random() * tiles.length)];
     return getMonetization(tile);
   }, [collage]);
@@ -119,4 +127,17 @@ export function useRandomMonetization(collage) {
 
 export function useCollage() {
   return useResource(CollageResourceUrl);
+}
+
+export function useMaxCoordinates(collage) {
+  return useMemo(() => {
+    const tiles = collage && getAllTiles(collage);
+    const coordinates = tiles.map(getCoordinates)
+    const xs = coordinates.length > 0 && coordinates.map(({ x }) => x);
+    const ys = coordinates.length > 0 && coordinates.map(({ y }) => y);
+    return {
+      x: Math.max(...xs),
+      y: Math.max(...ys),
+    };
+  }, [collage]);
 }

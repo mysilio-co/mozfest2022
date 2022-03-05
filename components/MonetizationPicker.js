@@ -2,8 +2,10 @@ import { useState } from "react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import { Combobox } from "@headlessui/react";
 
+export const MysilioPointer = "$ilp.uphold.com/DYPhbXPmDa2P";
+
 export const MonetizationPointers = [
-  { name: "Mysilio", pointer: "$ilp.uphold.com/DYPhbXPmDa2P" },
+  { name: "Mysilio", pointer: MysilioPointer },
   { name: "Defold Foundation", pointer: "$ilp.uphold.com/QkG86UgXzKq8" },
   { name: "freeCodeCamp", pointer: "$ilp.uphold.com/LJmbPn7WD4JB" },
   { name: "Internet Archive", pointer: "$ilp.uphold.com/D7BwPKMQzBiD" },
