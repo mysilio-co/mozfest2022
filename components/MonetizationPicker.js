@@ -46,7 +46,7 @@ export function MonetizationPicker({ setMonetization }) {
       }}
     >
       <Combobox.Label className="block text-sm font-medium text-gray-700">
-        Choose a Web Monetization Pointer
+        Who would you like to monetize this line for?
       </Combobox.Label>
       <div className="relative mt-1">
         <Combobox.Input

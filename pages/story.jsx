@@ -13,16 +13,14 @@ export default function ExquisiteStory() {
 
   return (
     <main className="min-h-screen bg-gradient-to-r from-my-green via-ocean to-my-purple">
-      <section className="pt-20">
-        <div className="relative py-16 bg-white overflow-hidden">
-          <div className="relative px-4 sm:px-6 lg:px-8">
-            <div className="text-lg max-w-prose mx-auto">
-              {fullStoryDisplay ? (
-                <DisplayStory story={resource} />
-              ) : (
-                <AddToStory story={resource} saveStory={saveAndDisplayStory} />
-              )}
-            </div>
+      <section className="min-h-screen mx-auto w-4/5 bg-white/90 shadow-2xl py-20">
+        <div className="relative px-4 sm:px-6 lg:px-8">
+          <div className="text-lg max-w-prose mx-auto">
+            {fullStoryDisplay ? (
+              <DisplayStory story={resource} />
+            ) : (
+              <AddToStory story={resource} saveStory={saveAndDisplayStory} />
+            )}
           </div>
         </div>
       </section>
