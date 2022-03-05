@@ -28,20 +28,18 @@ export function AddToStory({ story, saveStory }) {
       <Head>
         {lastMonetization && <meta name="monetization" content={lastMonetization} />}
       </Head>
-      <DisplayLine line={lastLine} />
-      <label
-        htmlFor="comment"
-        className="block text-sm font-medium text-gray-700"
-      >
-        Add the next line
-      </label>
+      <h3 className="text-3xl mb-10">The story so far ends with:</h3>
+      <span className="mt-8 text-xl text-gray-700 leading-8">
+        &hellip; {getContent(lastLine)}
+      </span>
+
       <div className="mt-1">
         <textarea
           rows={4}
           name="nextLine"
           id="nextLine"
-          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-xl"
-          defaultValue={""}
+          className="shadow-sm block w-full border-0 rounded-md text-xl mb-6 bg-transparent"
+          placeholder="add the next line..."
           onChange={(e) => setContent(e.target.value)}
         />
       </div>
@@ -61,7 +59,7 @@ export function AddToStory({ story, saveStory }) {
 
 export function DisplayLine({ line }) {
   return (
-    <p className="mt-8 text-xl text-gray-500 leading-8">{getContent(line)}</p>
+    <p className="mt-8 text-xl text-gray-700 leading-8">{getContent(line)}</p>
   );
 }
 
