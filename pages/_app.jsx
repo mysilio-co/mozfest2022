@@ -1,4 +1,4 @@
-import '../styles/index.css'
+import '../styles/globals.css'
 import { AuthenticationProvider } from 'swrlit'
 
 function MyApp({ Component, pageProps }) {

@@ -13,7 +13,7 @@ export default function ExquisiteStory() {
 
   return (
     <main className="min-h-screen bg-gradient-to-r from-my-green via-ocean to-my-purple">
-      <section className="content">
+      <section className="pt-20">
         <div className="relative py-16 bg-white overflow-hidden">
           <div className="relative px-4 sm:px-6 lg:px-8">
             <div className="text-lg max-w-prose mx-auto">
