@@ -189,15 +189,22 @@ export function ImageUploadAndEditor({ onSave, onClose }) {
   );
 }
 
-export default function ImageUploadModal({open, setOpen, onSave, uploadContainerUri}) {
-  return (<Modal open={open} onClose={() => { setOpen(false) }}>
-    <div>
-      <ImageUploadAndEditor
-        onSave={onSave}
-        onClose={() => { setOpen(false) }}
-        imageUploadContainerUri={uploadContainerUri }
-      />
-    </div>
-  </Modal>
-  )
+export function ImageUploadModal({ open, setOpen, onSave }) {
+  return (
+    <Modal
+      open={open}
+      onClose={() => {
+        setOpen(false);
+      }}
+    >
+      <div>
+        <ImageUploadAndEditor
+          onSave={onSave}
+          onClose={() => {
+            setOpen(false);
+          }}
+        />
+      </div>
+    </Modal>
+  );
 }

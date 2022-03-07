@@ -1,7 +1,15 @@
 import { useState } from "react";
 import Head from "next/head";
-import { getAllTiles, getImage, useRandomMonetization, getMonetization, getVisibleTiles, getCoordinates } from "../model/collage";
-import { MonetizationPicker, MysilioPointer} from "./MonetizationPicker";
+import {
+  getAllTiles,
+  getImage,
+  useRandomMonetization,
+  useMaxCoordinates,
+  getVisibleTiles,
+  getCoordinates,
+} from "../model/collage";
+import { MonetizationPicker, MysilioPointer } from "./MonetizationPicker";
+import { ImageUploadModal } from "./ImageUploader";
 
 export function AddToCollage({ collage, saveCollage}) {
   const { x, y } = useMaxCoordinates(collage);
@@ -67,10 +75,6 @@ export function ImageUploadTile({x, y, openModal}) {
       </button>
     </div>
   )
-}
-
-export function UploadImageModal() {
-
 }
 
 export function DisplayTile({ tile }) {
