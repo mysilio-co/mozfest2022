@@ -34,11 +34,11 @@ export function AddToStory({ story, saveStory }) {
       </span>
 
       <div className="mt-1">
-        <textarea
-          rows={4}
+        <input
+          type="text"
           name="nextLine"
           id="nextLine"
-          className="shadow-sm block w-full border-0 rounded-md text-xl mb-6 bg-transparent"
+          className="shadow-sm block w-full border-0 border-b-2 text-xl mb-6 bg-transparent focus:ring-0 focus:shadow-none focus:outline-none focus:border-ocean"
           placeholder="add the next line..."
           onChange={(e) => setContent(e.target.value)}
         />
@@ -57,10 +57,25 @@ export function AddToStory({ story, saveStory }) {
   );
 }
 
-export function DisplayLine({ line }) {
+export function DisplayLine({ line, textColor = "text-gray-700" }) {
   return (
-    <p className="mt-8 text-xl text-gray-700 leading-8">{getContent(line)}</p>
+    <span className={`mt-8 text-3xl ${textColor} leading-8 font-[stix-two-text]`}>
+      {getContent(line)}
+    </span>
   );
+}
+
+const displayLineColors = [
+  'text-amber-600',
+  'text-indigo-700',
+  'text-rose-600',
+  'text-sky-700',
+  'text-fuchsia-700',
+  'text-teal-600',
+]
+
+function displayLineColor(i) {
+  return displayLineColors[i % displayLineColors.length]
 }
 
 export function DisplayStory({ story }) {
@@ -68,8 +83,11 @@ export function DisplayStory({ story }) {
   return (
     <>
       <Head>{monetization && <meta name="monetization" content={monetization} />}</Head>
-      {getLines(story).map((line) => (
-        <DisplayLine line={line} />
+      <h3 className="text-3xl mb-10">Here's the story so far:</h3>
+      {getLines(story).map((line, i) => (
+        <>
+          <DisplayLine line={line} textColor={displayLineColor(i)} />&nbsp;
+        </>
       ))}
     </>
   );
