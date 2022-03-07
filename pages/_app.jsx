@@ -3,9 +3,11 @@ import { AuthenticationProvider } from 'swrlit'
 
 function MyApp({ Component, pageProps }) {
   return (
-    <AuthenticationProvider>
-      <Component {...pageProps} />
-    </AuthenticationProvider>
+    <>
+      <AuthenticationProvider>
+        <Component {...pageProps} />
+      </AuthenticationProvider>
+    </>
   )
 }
 
