@@ -23,13 +23,19 @@ export const MonetizationPointers = [
   },
 ];
 
+function randomPP() {
+  return MonetizationPointers[
+    Math.floor(Math.random() * MonetizationPointers.length)
+  ];
+}
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export function MonetizationPicker({ setMonetization }) {
   const [query, setQuery] = useState("");
-  const [selectedPP, setSelectedPP] = useState();
+  const [selectedPP, setSelectedPP] = useState(randomPP());
 
   const filteredPointers =
     query === ""
