@@ -10,13 +10,14 @@ import {
 import { RDF, DCTERMS } from "@inrupt/vocab-common-rdf";
 import { WM, SIOC, EXQ } from "../vocab";
 import { useResource } from "swrlit";
-import { hasRDFType } from "../model/utils";
+import { hasRDFType, useLocalStorage } from "../model/utils";
 
-const StoryResourceUrl =
-  "https://exquisite-corpse.mysilio.me/mozfest2022/story.ttl";
+const StoryResourceUrls = {
+  test: "https://exquisite-corpse.mysilio.me/mozfest2022/story.ttl",
+};
 
-export function urlForStoryLine(n) {
-  return `${StoryResourceUrl}#${n}`;
+export function urlForStoryLine(base, n) {
+  return `${base}#${n}`;
 }
 
 export function getLineNum(line) {
@@ -50,7 +51,7 @@ export function getLines(story) {
 }
 
 export function createLineThing(content, monetization, n) {
-  return buildThing(createThing({ url: urlForStoryLine(n) }))
+  return buildThing(createThing({ name: `${n}` }))
     .addUrl(RDF.type, EXQ.Line)
     .addDatetime(DCTERMS.created, new Date())
     .addStringNoLocale(SIOC.content, content)
@@ -74,6 +75,14 @@ export function useRandomMonetization(story) {
   }, [story]);
 }
 
-export function useStory() {
-  return useResource(StoryResourceUrl);
+export function useRandomStorySlug() {
+  return useMemo(() => {
+    const slugs = Object.keys(StoryResourceUrls);
+    const slug = slugs[Math.floor(Math.random() * slugs.length)];
+    return slug;
+  }, []);
+}
+
+export function useStory(slug) {
+  return useResource(StoryResourceUrls[slug]);
 }

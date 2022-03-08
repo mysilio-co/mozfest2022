@@ -1,10 +1,13 @@
-import { useState } from "react";
-import { useStory } from "../model/story";
-import { AddToStory, DisplayStory } from "../components/Story"
+import { useRouter } from 'next/router'
+import { useStory } from "../../model/story";
+import { AddToStory, DisplayStory } from "../../components/Story"
+import { useLocalStorage } from "../../model/utils";
 
 export default function ExquisiteStory() {
-  const { resource, save } = useStory();
-  const [fullStoryDisplay, setFullStoryDisplay] = useState(false);
+  const router = useRouter()
+  const { slug } = router.query;
+  const { resource, save } = useStory(slug);
+  const [fullStoryDisplay, setFullStoryDisplay] = useLocalStorage(slug, false);
 
   async function saveAndDisplayStory(newStory) {
     await save(newStory);
