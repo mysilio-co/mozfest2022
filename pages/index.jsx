@@ -25,15 +25,6 @@ export default function ExquisiteIntro() {
           </p>
         </div>
         <div className="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto">
-          <h2>What is Exquisite Story?</h2>
-          <p>
-            A collaborative storytelling experience. Want a more visual
-            storytelling experience?&nbsp;
-            <Link href="/collage">
-              <a>Check out Exquisite Collage</a>
-            </Link>
-            .
-          </p>
           <h2>How do I play?</h2>
           <p>
             Click the button below to get started. You’ll be taken to a
