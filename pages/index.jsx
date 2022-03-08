@@ -13,7 +13,7 @@ export default function ExquisiteIntro() {
       <Head>
         <meta name="monetization" content={MysilioPointer} key="monetization" />
       </Head>
-      <section className="relative mx-auto w-4/5 bg-white/90 shadow-2xl py-20">
+      <section className="min-h-screen relative mx-auto w-4/5 bg-white/90 shadow-2xl py-20">
         <div className="text-lg max-w-prose mx-auto">
           <h1>
             <span className="block text-base text-center text-indigo-600 font-semibold tracking-wide uppercase">
