@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Head from "next/head";
 import {
   getLastLine,
@@ -10,7 +10,7 @@ import {
 } from "../model/story";
 import { Formik, Form, useField } from "formik";
 import * as Yup from 'yup';
-import { MonetizationPicker, MysilioPointer } from "./MonetizationPicker";
+import { MonetizationPicker, MysilioPointer, orgForPointer } from "./MonetizationPicker";
 
 export function Input({
   className = "",
@@ -98,9 +98,10 @@ export function AddToStory({ story, saveStory }) {
   );
 }
 
-export function DisplayLine({ line, textColor = "text-gray-700" }) {
+export function DisplayLine({ line, selectedLine, textColor = "text-gray-700", onClick }) {
+  const myTextColor = selectedLine === undefined ? textColor : (selectedLine === line ? textColor : 'text-gray-700')
   return (
-    <span className={`mt-8 text-3xl ${textColor} leading-8 font-[stix-two-text]`}>
+    <span className={`text-2xl ${myTextColor} font-[krete] leading-8 cursor-pointer`} onClick={(e) => onClick(e, line)}>
       {getContent(line)}
     </span>
   );
@@ -120,14 +121,30 @@ function displayLineColor(i) {
 }
 
 export function DisplayStory({ story }) {
-  const monetization = useRandomMonetization(story);
+  const randomMonetization = useRandomMonetization(story);
+  const [selectedLine, setSelectedLine] = useState()
+  const selectLine = useCallback(function (e, line) {
+    setSelectedLine(line)
+  })
+  const selectedMonetization = selectedLine && getMonetization(selectedLine)
+  const monetization = selectedMonetization || randomMonetization
   return (
     <>
-      <Head>{monetization && <meta name="monetization" content={monetization} />}</Head>
-      <h3 className="text-3xl mb-10">Here's the story so far:</h3>
+      <Head>{monetization && <meta name="monetization" content={monetization} key="monetization" />}</Head>
+      <h3 className="text-4xl mb-10 text-center">The story so far!</h3>
+      <p className="text-center">
+        Here's the story so far. It's being monetized for:
+      </p>
+      <h4 className="font-bold text-center my-4">{orgForPointer(monetization)}</h4>
+      <p className="text-center mb-10">
+        You can use
+        your web monetization extension to send them a tip! If you click a line below it will change
+        who the page is monetized for, and let you tip - try clicking your favorite line and sending
+        some cash to the very special organization chosen by the line's author!
+      </p>
       {getLines(story).map((line, i) => (
         <>
-          <DisplayLine line={line} textColor={displayLineColor(i)} />&nbsp;
+          <DisplayLine line={line} selectedLine={selectedLine} textColor={displayLineColor(i)} onClick={selectLine} />&nbsp;
         </>
       ))}
     </>
