@@ -25,8 +25,9 @@ export default function ExquisiteStory() {
           <div className="text-lg max-w-prose mx-auto">
             {!isMonetizing ? (
               <>
-                <h1>Please enable Web Monetization to continue.</h1>
-                <h3>What is Web Monetization?</h3>
+                <h3 className="text-3xl mb-10">
+                  Please enable Web Monetization to continue.
+                </h3>
                 <p>
                   Web Monetization is a proposed API standard that enables
                   website visitors with the ability to stream micropayments to
