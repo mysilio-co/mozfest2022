@@ -8,16 +8,54 @@ import {
   getLines,
   getContent,
 } from "../model/story";
+import { Formik, Form, useField } from "formik";
+import * as Yup from 'yup';
 import { MonetizationPicker, MysilioPointer } from "./MonetizationPicker";
+
+export function Input({
+  className = "",
+  inputClassName = "",
+  errorClassName = "",
+  ...props
+}) {
+  const [field, meta, helpers] = useField(props);
+  const validationClassName = meta.touched
+    ? meta.error
+      ? "error"
+      : "success"
+    : "";
+  return (
+    <div className={`flex flex-col ${className}`}>
+      <input
+        className={`ipt ${validationClassName} ${inputClassName}`}
+        {...field}
+        {...props}
+      />
+      {meta.error && (
+        <span className={`ipt-error-message ${errorClassName}`}>
+          {meta.error.toString()}
+        </span>
+      )}
+    </div>
+  );
+}
+
+const NewLineSchema = Yup.object().shape({
+  line: Yup.string()
+    .min(140, "That's not enough to advance the story. Try writing more!")
+    .required(
+      "Even bad art is better than no art. Empty lines are not allowed."
+    )
+    .max(280, "That's too much! Leave some story for others!"),
+});
 
 export function AddToStory({ story, saveStory }) {
   const lastLine = getLastLine(story);
 
   const [monetization, setMonetization] = useState("");
-  const [content, setContent] = useState("");
-  const onSubmit = async () => {
-    if (story && content && monetization) {
-      const newStory = addLine(story, content, monetization);
+  const onSubmit = async ({ line }) => {
+    if (story && line && monetization) {
+      const newStory = addLine(story, line, monetization);
       await saveStory(newStory);
     }
   };
@@ -32,26 +70,30 @@ export function AddToStory({ story, saveStory }) {
         &hellip; {getContent(lastLine)}
       </span>
 
-      <div className="mt-1">
-        <input
-          type="text"
-          name="nextLine"
-          id="nextLine"
-          className="shadow-sm block w-full border-0 border-b-2 text-xl mb-6 bg-transparent focus:ring-0 focus:shadow-none focus:outline-none focus:border-ocean"
-          placeholder="add the next line..."
-          onChange={(e) => setContent(e.target.value)}
-        />
-      </div>
-      <MonetizationPicker setMonetization={setMonetization} />
-      <div className="h-20 flex flex-row justify-end items-center px-6">
-        <button
-          type="submit"
-          className="btn-md btn-filled btn-square h-10 ring-my-green text-my-green flex flex-row justify-center items-center"
-          onClick={onSubmit}
-        >
-          Submit
-        </button>
-      </div>
+      <Formik
+        initialValues={{ line: "" }}
+        validationSchema={NewLineSchema}
+        onSubmit={onSubmit}
+      >
+        <Form className="mt-1">
+          <Input
+            type="text"
+            name="line"
+            id="line"
+            className="shadow-sm block w-full border-0 border-b-2 text-xl mb-6 bg-transparent focus:ring-0 focus:shadow-none focus:outline-none focus:border-ocean"
+            placeholder="add the next line..."
+          />
+          <MonetizationPicker setMonetization={setMonetization} />
+          <div className="h-20 flex flex-row justify-end items-center px-6">
+            <button
+              type="submit"
+              className="btn-md btn-filled btn-square h-10 ring-my-green text-my-green flex flex-row justify-center items-center"
+            >
+              Submit
+            </button>
+          </div>
+        </Form>
+      </Formik>
     </>
   );
 }

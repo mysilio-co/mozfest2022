@@ -2,3 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+.ipt {
+  @apply rounded-lg border-0 ring-1 ring-gray-300 py-2.5 px-4 text-sm text-gray-800 placeholder-gray-400 focus:ring-gray-300;
+}
+
+.ipt.error {
+  @apply ring-ember;
+}
+
+.ipt.success {
+  @apply ring-my-green;
+}
+
+.ipt-error-message {
+  @apply uppercase pl-4 text-sm font-bold text-red-300;
+}
