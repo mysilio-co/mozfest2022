@@ -23,6 +23,15 @@ export const MonetizationPointers = [
   },
 ];
 
+const OrgsByPointer = MonetizationPointers.reduce((m, mp) => {
+  m[mp.pointer] = mp.name
+  return m
+}, {})
+
+export function orgForPointer(pointer){
+  return OrgsByPointer[pointer]
+}
+
 function randomPP() {
   return MonetizationPointers[
     Math.floor(Math.random() * MonetizationPointers.length)
