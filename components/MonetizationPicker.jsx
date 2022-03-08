@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import { Combobox } from "@headlessui/react";
 
@@ -35,7 +35,14 @@ function classNames(...classes) {
 
 export function MonetizationPicker({ setMonetization }) {
   const [query, setQuery] = useState("");
-  const [selectedPP, setSelectedPP] = useState(randomPP());
+  const [selectedPP, setSelectedPP] = useState();
+  const setPP = (pp) => {
+    setSelectedPP(pp);
+    setMonetization(pp.pointer);
+  };
+  useEffect(() => {
+    setPP(randomPP());
+  }, []);
 
   const filteredPointers =
     query === ""
@@ -45,14 +52,7 @@ export function MonetizationPicker({ setMonetization }) {
         });
 
   return (
-    <Combobox
-      as="div"
-      value={selectedPP}
-      onChange={(pp) => {
-        setSelectedPP(pp);
-        setMonetization(pp.pointer);
-      }}
-    >
+    <Combobox as="div" value={selectedPP} onChange={setPP}>
       <Combobox.Label className="block text-sm font-medium text-gray-700">
         Who would you like to monetize this line for?
       </Combobox.Label>
