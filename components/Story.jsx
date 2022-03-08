@@ -62,9 +62,6 @@ export function AddToStory({ story, saveStory }) {
 
   return (
     <>
-      <Head>
-        <meta name="monetization" content={MysilioPointer} />
-      </Head>
       <h3 className="text-3xl mb-10">The story so far ends with:</h3>
       <span className="mt-8 text-xl text-gray-700 leading-8">
         &hellip; {getContent(lastLine)}

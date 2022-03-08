@@ -1,11 +1,16 @@
 import Link from "next/link";
+import Head from "next/head";
 import { useWebMonetization } from "../model/utils";
+import { MysilioPointer } from "../components/MonetizationPicker";
 
 export default function ExquisiteIntro() {
   const { isMonetizing } = useWebMonetization();
 
   return (
     <main className="min-h-screen bg-gradient-to-r from-my-green via-ocean to-my-purple">
+      <Head>
+        <meta name="monetization" content={MysilioPointer} key="monetization" />
+      </Head>
       <section className="relative mx-auto w-4/5 bg-white/90 shadow-2xl py-20">
         <div className="text-lg max-w-prose mx-auto">
           <h1>
