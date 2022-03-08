@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { useWebMonetization } from "../model/utils";
 
 export default function ExquisiteIntro() {
+  const { isMonetizing } = useWebMonetization();
+
   return (
     <main className="min-h-screen bg-gradient-to-r from-my-green via-ocean to-my-purple">
       <section className="relative mx-auto w-4/5 bg-white/90 shadow-2xl py-20">
@@ -53,11 +56,15 @@ export default function ExquisiteIntro() {
               https://webmonetization.org/docs/explainer/
             </a>
           </p>
-          <h2>
-            <Link href="/story">
-              <a>Join the Story</a>
-            </Link>
-          </h2>
+          {!isMonetizing ? (
+            <h2>Please enable Web Monetization to participate</h2>
+          ) : (
+            <h2>
+              <Link href="/story">
+                <a>Join the Story</a>
+              </Link>
+            </h2>
+          )}
         </div>
       </section>
     </main>
