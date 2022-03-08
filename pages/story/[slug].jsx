@@ -19,13 +19,16 @@ export default function ExquisiteStory() {
       <section className="min-h-screen mx-auto w-4/5 bg-white/90 shadow-2xl py-20">
         <div className="relative px-4 sm:px-6 lg:px-8">
           <div className="text-lg max-w-prose mx-auto">
-            {resource && (
-              fullStoryDisplay ? (
-                <DisplayStory story={resource} />
+            {resource &&
+              (fullStoryDisplay ? (
+                <DisplayStory slug={slug} story={resource} />
               ) : (
-                <AddToStory story={resource} saveStory={saveAndDisplayStory} />
-              )
-            )}
+                <AddToStory
+                  slug={slug}
+                  story={resource}
+                  saveStory={saveAndDisplayStory}
+                />
+              ))}
           </div>
         </div>
       </section>

@@ -10,7 +10,7 @@ import {
 import { RDF, DCTERMS } from "@inrupt/vocab-common-rdf";
 import { WM, SIOC, EXQ } from "../vocab";
 import { useResource } from "swrlit";
-import { hasRDFType, useLocalStorage } from "../model/utils";
+import { hasRDFType } from "../model/utils";
 
 const StoryResourceUrls = {
   test: "https://exquisite-corpse.mysilio.me/mozfest2022/story.ttl",
@@ -75,10 +75,14 @@ export function useRandomMonetization(story) {
   }, [story]);
 }
 
-export function useRandomStorySlug() {
+export function useRandomStorySlug(options) {
   return useMemo(() => {
     const slugs = Object.keys(StoryResourceUrls);
-    const slug = slugs[Math.floor(Math.random() * slugs.length)];
+    const filtered =
+      options && options.ignore
+        ? slugs.filter((s) => s !== options.ignore)
+        : slugs;
+    const slug = filtered[Math.floor(Math.random() * filtered.length)];
     return slug;
   }, []);
 }
