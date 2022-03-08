@@ -1,5 +1,6 @@
 import { RDF } from "@inrupt/vocab-common-rdf";
 import { getUrlAll } from "@inrupt/solid-client";
+import { useEffect, useMemo, useState } from "react";
 
 export function isLiteralTerm(s) {
   return typeof s === "string" || s instanceof String;
@@ -59,4 +60,42 @@ export function useLocalStorage(key, initialValue) {
   };
 
   return [storedValue, setValue];
+}
+
+export function useWebMonetization() {
+  const [isMonetizing, setIsMonetizing] = useState(false);
+  const [unscaledTotal, setUnscaledTotal] = useState(0);
+  const [assetScale, setAssetScale] = useState(0);
+  const [assetCode, setAssetCode] = useState("");
+  const scaledTotal = useMemo(() => {
+    return (unscaledTotal * Math.pow(10, -assetScale)).toFixed(assetScale);
+  }, [unscaledTotal, assetScale]);
+
+  const handleMonetizationEvent = (ev) => {
+    // initialize currency and scale on first progress event
+    if (unscaledTotal === 0) {
+      setAssetScale(ev.detail.assetScale);
+      setAssetCode(ev.detail.assetCode);
+    }
+
+    setUnscaledTotal((currentTotal) => currentTotal + Number(ev.detail.amount));
+  };
+
+  useEffect(() => {
+    if (document.monetization) {
+      document.monetization.addEventListener("monetizationstart", () => {
+        setIsMonetizing(true);
+      });
+      document.monetization.addEventListener(
+        "monetizationprogress",
+        handleMonetizationEvent
+      );
+    }
+  }, []);
+
+  return {
+    isMonetizing,
+    total: scaledTotal,
+    currency: assetCode,
+  };
 }
