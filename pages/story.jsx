@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Head from "next/head";
 import { useStory } from "../model/story";
-import { useWebMonetization } from "../model/utils";
 import { MysilioPointer } from "../components/MonetizationPicker";
 import { AddToStory, DisplayStory } from "../components/Story"
+import { useWebMonetization } from "../model/utils";
 
 export default function ExquisiteStory() {
   const { resource, save } = useStory();

@@ -1,11 +1,10 @@
 import Link from "next/link";
 import Head from "next/head";
-import { useWebMonetization } from "../model/utils";
 import { MysilioPointer } from "../components/MonetizationPicker";
+import { useWebMonetization } from "../model/utils";
 
 export default function ExquisiteIntro() {
   const { isMonetizing } = useWebMonetization();
-
   return (
     <main className="min-h-screen bg-gradient-to-r from-my-green via-ocean to-my-purple">
       <Head>

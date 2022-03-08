@@ -1,6 +1,6 @@
 import { RDF } from "@inrupt/vocab-common-rdf";
 import { getUrlAll } from "@inrupt/solid-client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, createContext, useContext } from "react";
 
 export function isLiteralTerm(s) {
   return typeof s === "string" || s instanceof String;
@@ -62,7 +62,9 @@ export function useLocalStorage(key, initialValue) {
   return [storedValue, setValue];
 }
 
-export function useWebMonetization() {
+export const WebMonetizationContext = createContext();
+
+export const WebMonetizationProvider = ({ children }) => {
   const [isMonetizing, setIsMonetizing] = useState(false);
   const [unscaledTotal, setUnscaledTotal] = useState(0);
   const [assetScale, setAssetScale] = useState(0);
@@ -87,7 +89,10 @@ export function useWebMonetization() {
   useEffect(() => {
     if (document.monetization) {
       document.monetization.addEventListener("monetizationstart", handleStart);
-      document.monetization.addEventListener( "monetizationprogress", handleProgress);
+      document.monetization.addEventListener(
+        "monetizationprogress",
+        handleProgress
+      );
     }
     return () => {
       if (document.monetization) {
@@ -103,9 +108,19 @@ export function useWebMonetization() {
     };
   }, []);
 
-  return {
-    isMonetizing,
-    total: scaledTotal,
-    currency: assetCode,
-  };
+  return (
+    <WebMonetizationContext.Provider
+      value={{
+        isMonetizing,
+        total: scaledTotal,
+        currency: assetCode,
+      }}
+    >
+      {children}
+    </WebMonetizationContext.Provider>
+  );
+};
+
+export function useWebMonetization() {
+  return useContext(WebMonetizationContext);
 }

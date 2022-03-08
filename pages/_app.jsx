@@ -1,14 +1,17 @@
 import '../styles/globals.css'
 import { AuthenticationProvider } from 'swrlit'
+import { WebMonetizationProvider } from "../model/utils";
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
       <AuthenticationProvider>
-        <Component {...pageProps} />
+        <WebMonetizationProvider>
+          <Component {...pageProps} />
+        </WebMonetizationProvider>
       </AuthenticationProvider>
     </>
-  )
+  );
 }
 
 export default MyApp
