@@ -71,8 +71,11 @@ export function useWebMonetization() {
     return (unscaledTotal * Math.pow(10, -assetScale)).toFixed(assetScale);
   }, [unscaledTotal, assetScale]);
 
-  const handleMonetizationEvent = (ev) => {
+  const handleStart = () => setIsMonetizing(true);
+
+  const handleProgress = (ev) => {
     // initialize currency and scale on first progress event
+    setIsMonetizing(true);
     if (unscaledTotal === 0) {
       setAssetScale(ev.detail.assetScale);
       setAssetCode(ev.detail.assetCode);
@@ -83,14 +86,21 @@ export function useWebMonetization() {
 
   useEffect(() => {
     if (document.monetization) {
-      document.monetization.addEventListener("monetizationstart", () => {
-        setIsMonetizing(true);
-      });
-      document.monetization.addEventListener(
-        "monetizationprogress",
-        handleMonetizationEvent
-      );
+      document.monetization.addEventListener("monetizationstart", handleStart);
+      document.monetization.addEventListener( "monetizationprogress", handleProgress);
     }
+    return () => {
+      if (document.monetization) {
+        document.monetization.removeEventListener(
+          "monetizationstart",
+          handleStart
+        );
+        document.monetization.removeEventListener(
+          "monetizationprogress",
+          handleProgress
+        );
+      }
+    };
   }, []);
 
   return {
