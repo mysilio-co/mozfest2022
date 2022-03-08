@@ -1,13 +1,16 @@
-import { useState } from "react";
 import Head from "next/head";
-import { useStory } from "../model/story";
-import { MysilioPointer } from "../components/MonetizationPicker";
-import { AddToStory, DisplayStory } from "../components/Story"
-import { useWebMonetization } from "../model/utils";
+import { useRouter } from 'next/router'
+import { useStory } from "../../model/story";
+import { AddToStory, DisplayStory } from "../../components/Story"
+import { useLocalStorage } from "../../model/utils";
+import { useWebMonetization } from "../../model/utils";
+import { MysilioPointer } from "../../components/MonetizationPicker";
 
 export default function ExquisiteStory() {
-  const { resource, save } = useStory();
-  const [fullStoryDisplay, setFullStoryDisplay] = useState(false);
+  const router = useRouter()
+  const { slug } = router.query;
+  const { resource, save } = useStory(slug);
+  const [fullStoryDisplay, setFullStoryDisplay] = useLocalStorage(slug, false);
   const { isMonetizing } = useWebMonetization();
 
   async function saveAndDisplayStory(newStory) {
@@ -38,13 +41,16 @@ export default function ExquisiteStory() {
                 </p>
               </>
             ) : (
-              resource &&
+            resource &&
               (fullStoryDisplay ? (
-                <DisplayStory story={resource} />
+                <DisplayStory slug={slug} story={resource} />
               ) : (
-                <AddToStory story={resource} saveStory={saveAndDisplayStory} />
-              ))
-            )}
+                <AddToStory
+                  slug={slug}
+                  story={resource}
+                  saveStory={saveAndDisplayStory}
+                />
+              )))}
           </div>
         </div>
       </section>
