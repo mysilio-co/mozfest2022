@@ -1,11 +1,18 @@
 import Link from "next/link";
+import Head from "next/head";
+import { MysilioPointer } from "../components/MonetizationPicker";
+import { useWebMonetization } from "../model/utils";
 import { useRandomStorySlug } from "../model/story";
 
 export default function ExquisiteIntro() {
+  const { isMonetizing } = useWebMonetization();
   const slug = useRandomStorySlug();
 
   return (
     <main className="min-h-screen bg-gradient-to-r from-my-green via-ocean to-my-purple">
+      <Head>
+        <meta name="monetization" content={MysilioPointer} key="monetization" />
+      </Head>
       <section className="relative mx-auto w-4/5 bg-white/90 shadow-2xl py-20">
         <div className="text-lg max-w-prose mx-auto">
           <h1>
@@ -56,11 +63,15 @@ export default function ExquisiteIntro() {
               https://webmonetization.org/docs/explainer/
             </a>
           </p>
-          <h2>
-            <Link href={`/story/${slug}`}>
-              <a>Join the Story</a>
-            </Link>
-          </h2>
+          {!isMonetizing ? (
+            <h2>Please enable Web Monetization to participate</h2>
+          ) : (
+            <h2>
+              <Link href={`/story/${slug}`}>
+                <a>Join the Story</a>
+              </Link>
+            </h2>
+          )}
         </div>
       </section>
     </main>
