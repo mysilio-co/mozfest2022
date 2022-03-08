@@ -4,7 +4,7 @@ import { AddToStory, DisplayStory } from "../components/Story"
 
 export default function ExquisiteStory() {
   const { resource, save } = useStory();
-  const [fullStoryDisplay, setFullStoryDisplay] = useState(true);
+  const [fullStoryDisplay, setFullStoryDisplay] = useState(false);
 
   async function saveAndDisplayStory(newStory) {
     await save(newStory);
