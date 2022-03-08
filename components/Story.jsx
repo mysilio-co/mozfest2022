@@ -80,7 +80,7 @@ export function AddToStory({ story, saveStory }) {
             type="text"
             name="line"
             id="line"
-            className="shadow-sm block w-full border-0 border-b-2 text-xl mb-6 bg-transparent focus:ring-0 focus:shadow-none focus:outline-none focus:border-ocean"
+            className="block w-full border-0 text-xl mb-6 bg-transparent focus:ring-0 focus:shadow-none focus:outline-none focus:border-ocean"
             placeholder="add the next line..."
           />
           <MonetizationPicker setMonetization={setMonetization} />
