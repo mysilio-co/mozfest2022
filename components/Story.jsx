@@ -12,7 +12,8 @@ import {
 } from "../model/story";
 import { Formik, Form, useField } from "formik";
 import * as Yup from 'yup';
-import { MonetizationPicker, MysilioPointer, orgForPointer } from "./MonetizationPicker";
+import { MonetizationPicker, orgForPointer } from "./MonetizationPicker";
+import { useWebMonetization } from "../model/utils";
 
 export function Input({
   className = "",
@@ -53,6 +54,7 @@ const NewLineSchema = Yup.object().shape({
 
 export function AddToStory({ story, saveStory }) {
   const lastLine = getLastLine(story);
+  const { isMonetizing } = useWebMonetization();
 
   const [monetization, setMonetization] = useState("");
   const onSubmit = async ({ line }) => {
@@ -84,12 +86,18 @@ export function AddToStory({ story, saveStory }) {
           />
           <MonetizationPicker setMonetization={setMonetization} />
           <div className="h-20 flex flex-row justify-end items-center px-6">
-            <button
-              type="submit"
-              className="btn-md btn-filled btn-square h-10 ring-my-green text-my-green flex flex-row justify-center items-center"
-            >
-              Submit
-            </button>
+            {!isMonetizing ? (
+              <h3 className="text-3xl mt-10">
+                Please enable Web Monetization to participate
+              </h3>
+            ) : (
+              <button
+                type="submit"
+                className="btn-md btn-filled btn-square h-10 ring-my-green text-my-green flex flex-row justify-center items-center text-3xl"
+              >
+                Submit
+              </button>
+            )}
           </div>
         </Form>
       </Formik>
@@ -121,6 +129,7 @@ function displayLineColor(i) {
 
 export function DisplayStory({ slug, story }) {
   const nextStorySlug = useRandomStorySlug({ ignore: slug });
+  const { isMonetizing } = useWebMonetization();
 
   const randomMonetization = useRandomMonetization(story);
   const [selectedLine, setSelectedLine] = useState()
@@ -137,18 +146,24 @@ export function DisplayStory({ slug, story }) {
         )}
       </Head>
       <h3 className="text-4xl mb-10 text-center">The story so far!</h3>
-      <p className="text-center">
-        Here's the story so far. It's being monetized for:
-      </p>
-      <h4 className="font-bold text-center my-4">
-        {orgForPointer(monetization)}
-      </h4>
-      <p className="text-center mb-10">
-        You can use your web monetization extension to send them a tip! If you
-        click a line below it will change who the page is monetized for, and let
-        you tip - try clicking your favorite line and sending some cash to the
-        very special organization chosen by the line's author!
-      </p>
+      {!isMonetizing ? (
+        <h4 className="text-center mb-10">
+          Please enable Web Monetization to participate
+        </h4>
+      ) : (
+        <>
+          <h4 className="text-center my-4">
+            It's being monetized for:&nbsp;
+            <span className="font-bold">{orgForPointer(monetization)}</span>
+          </h4>
+          <p className="text-center mb-10">
+            You can use your web monetization extension to send them a tip! If
+            you click a line below it will change who the page is monetized for,
+            and let you tip - try clicking your favorite line and sending some
+            cash to the very special organization chosen by the line's author!
+          </p>
+        </>
+      )}
       {getLines(story).map((line, i) => (
         <>
           <DisplayLine
