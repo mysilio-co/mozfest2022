@@ -13,7 +13,8 @@ import { useResource } from "swrlit";
 import { hasRDFType } from "../model/utils";
 
 const StoryResourceUrls = {
-  test: "https://exquisite-corpse.mysilio.me/mozfest2022/story.ttl",
+  CreatingNeurodiverseWellbeing:
+    "https://exquisite-corpse.mysilio.me/mozfest2022/CreatingNeurodiverseWellbeing.ttl",
 };
 
 export function urlForStoryLine(base, n) {
