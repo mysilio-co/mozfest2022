@@ -89,14 +89,16 @@ export default function ExquisiteIntro() {
             tip to reward particularly good content, and even gate content on
             payment, providing a viable alternative to advertising based
             buisiness models on the web. Monetizing your site is easy! All you
-            need to do is add the following&nbsp;
-            <span className="font-mono text-rose-600">{"<meta>"}</span> tag to
-            the&nbsp;
-            <span className="font-mono text-rose-600">{"<head>"}</span>&nbsp;
+            need to do is add the following
+            <span className="font-mono text-rose-600">{" <meta> "}</span>
+            tag to the
+            <span className="font-mono text-rose-600">{" <head> "}</span>
             section of all pages on your website.
           </p>
-          <p className="font-mono text-rose-600">
-            {'<meta name="monetization" content="$YourPaymentPointer" />'}
+          <p>
+            <span className="font-mono text-rose-600">
+              {'<meta name="monetization" content="$YourPaymentPointer" />'}
+            </span>
           </p>
           <h2>What is Solid?</h2>
           <p>
