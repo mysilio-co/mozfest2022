@@ -37,12 +37,19 @@ export default function ExquisiteIntro() {
         <div className="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto">
           <h2>How do I play?</h2>
           <p>
-            Click the link below to get started. You’ll be taken to a screen
-            with one sentence, written by the previous participant. Add on to
-            the story by submitting a new piece of text that furthers the
-            narrative. After you’ve submitted your next piece of writing, you’ll
-            be able to view the entirety of the story from all other
-            participants (and tip the contributions you love the most!).
+            {!isMonetizing ? (
+              <span>Click the link below to get started.</span>
+            ) : (
+              <Link href={`/story/${slug}`}>
+                <a>Click here to get started.</a>
+              </Link>
+            )}
+            &nbsp; You’ll be taken to a screen with one sentence, written by the
+            previous participant. Add on to the story by submitting a new piece
+            of text that furthers the narrative. After you’ve submitted your
+            next piece of writing, you’ll be able to view the entirety of the
+            story from all other participants (and tip the contributions you
+            love the most!).
           </p>
           <h2>Who built this?</h2>
           <p>
@@ -83,9 +90,9 @@ export default function ExquisiteIntro() {
             payment, providing a viable alternative to advertising based
             buisiness models on the web. Monetizing your site is easy! All you
             need to do is add the following&nbsp;
-            <span className="font-mono text-rose-600">{"<meta>"}</span> tag to the&nbsp;
+            <span className="font-mono text-rose-600">{"<meta>"}</span> tag to
+            the&nbsp;
             <span className="font-mono text-rose-600">{"<head>"}</span>&nbsp;
-
             section of all pages on your website.
           </p>
           <p className="font-mono text-rose-600">
