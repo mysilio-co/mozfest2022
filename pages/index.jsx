@@ -37,11 +37,12 @@ export default function ExquisiteIntro() {
         <div className="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto">
           <h2>How do I play?</h2>
           <p>
-            Click the button below to get started. You’ll be taken to a screen
+            Click the link below to get started. You’ll be taken to a screen
             with one sentence, written by the previous participant. Add on to
             the story by submitting a new piece of text that furthers the
-            narrative. After you’ve submitted your next piece of writing, you’ll be able to
-            view the entirety of the story from all other participants.
+            narrative. After you’ve submitted your next piece of writing, you’ll
+            be able to view the entirety of the story from all other
+            participants (and tip the contributions you love the most!).
           </p>
           <h2>Who built this?</h2>
           <p>
@@ -51,23 +52,25 @@ export default function ExquisiteIntro() {
             running with Web Monetization and Solid, supported by the generous
             grant funding of&nbsp;
             <a href="https://www.grantfortheweb.org/">Grant for the Web</a>. To
-            learn more about our work, our experiments, or to particpate in the
-            beta of our new Web Monetized publishing platform,&nbsp;
-            <a
-              className="font-bold"
-              href="https://mailchi.mp/865966fe3848/mysilio-waitlist"
-            >
-              join our mailing list.
-            </a>
-          </p>
-          <h2>What is Solid?</h2>
-          <p>
-            <a href="https://solidproject.org/">Social Linked Data</a>, or
-            Solid, is a proposed W3C standard for hosting personal data in
-            shared RDF datastores than can be used by any application. Solid
-            provides a rich toolset for data interoperability and storage,
-            allowing interactive applications like this one to be built quickly
-            without deploying additional backend servers.
+            learn more about our work and our experiments, you can&nbsp;
+            <ul>
+              <li>
+                <a href="https://mailchi.mp/865966fe3848/mysilio-waitlist">
+                  Join our mailing list
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/my_silio">Follow us on Twitter</a>
+              </li>
+              <li>
+                <a
+                  className="font-bold"
+                  href="https://mailchi.mp/865966fe3848/mysilio-waitlist"
+                >
+                  Register for our prototype Web Monetized publishing platform
+                </a>
+              </li>
+            </ul>
           </p>
           <h2>What is Web Monetization?</h2>
           <p>
@@ -78,17 +81,39 @@ export default function ExquisiteIntro() {
             the ability to stream micropayments directly to content creators,
             tip to reward particularly good content, and even gate content on
             payment, providing a viable alternative to advertising based
-            buisiness models on the web.
+            buisiness models on the web. Monetizing your site is easy! All you
+            need to do is add the following&nbsp;
+            <span className="font-mono text-rose-600">{"<meta>"}</span> tag to the&nbsp;
+            <span className="font-mono text-rose-600">{"<head>"}</span>&nbsp;
+
+            section of all pages on your website.
           </p>
-          {!isMonetizing ? (
-            <h2>Please enable Web Monetization to participate</h2>
-          ) : (
-            <h2>
-              <Link href={`/story/${slug}`}>
-                <a>Join the Story</a>
-              </Link>
-            </h2>
-          )}
+          <p className="font-mono text-rose-600">
+            {'<meta name="monetization" content="$YourPaymentPointer" />'}
+          </p>
+          <h2>What is Solid?</h2>
+          <p>
+            <a href="https://solidproject.org/">Social Linked Data</a>, or
+            Solid, is a proposed W3C standard for giving users control over
+            their online presence and ownship over their data. With Solid
+            personal data is stored in shared RDF datastores, and the user can
+            upload, revoke, or reshare the data in their datastore at any time,
+            with any app. For developers building apps on top of this data,
+            Solid provides a rich toolset for data interoperability and storage,
+            allowing interactive applications like this one to be built quickly
+            without deploying additional backend servers.
+          </p>
+          <div className="text-right">
+            {!isMonetizing ? (
+              <h2>Please enable Web Monetization to participate</h2>
+            ) : (
+              <h2>
+                <Link href={`/story/${slug}`}>
+                  <a>Join the Story</a>
+                </Link>
+              </h2>
+            )}
+          </div>
         </div>
       </section>
     </main>

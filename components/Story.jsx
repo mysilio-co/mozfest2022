@@ -176,7 +176,7 @@ export function DisplayStory({ slug, story }) {
         </>
       ))}
       {nextStorySlug && (
-        <div className="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto">
+        <div className="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto text-right">
           <h2>
             <Link href={`/story/${nextStorySlug}`}>
               <a>Join another Story</a>
