@@ -96,10 +96,21 @@ export function AddToStory({ story, saveStory }) {
   );
 }
 
-export function DisplayLine({ line, selectedLine, textColor = "text-gray-700", onClick }) {
-  const myTextColor = selectedLine === undefined ? textColor : (selectedLine === line ? textColor : 'text-gray-700')
+export function DisplayLine({
+  line,
+  selectedLine,
+  textColor = "text-gray-700",
+  onClick,
+}) {
+  const myTextColor =
+    selectedLine === undefined
+      ? textColor
+      : selectedLine === line
+      ? textColor
+      : "text-gray-700";
   return (
     <div
+      id={getUUID(line)}
       className={`text-2xl mb-10 ${myTextColor} font-[krete] leading-8 cursor-pointer`}
       onClick={(e) => onClick(e, line)}
     >
@@ -162,16 +173,13 @@ export function DisplayStory({ story }) {
         </>
       )}
       {lines.map((line, i) => (
-        <>
-          <DisplayLine
-            key={getUUID(line)}
-            id={getUUID(line)}
-            line={line}
-            selectedLine={selectedLine}
-            textColor={displayLineColor(i)}
-            onClick={selectLine}
-          />
-        </>
+        <DisplayLine
+          key={getUUID(line)}
+          line={line}
+          selectedLine={selectedLine}
+          textColor={displayLineColor(i)}
+          onClick={selectLine}
+        />
       ))}
     </>
   );

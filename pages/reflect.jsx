@@ -1,12 +1,9 @@
 import Head from "next/head";
-import { useRouter } from 'next/router'
 import { useReflections} from "../model/story";
 import { AddToStory, DisplayStory } from "../components/Story"
 import { MysilioPointer } from "../components/MonetizationPicker";
 
 export default function ExquisiteStory() {
-  const router = useRouter()
-  const { slug } = router.query;
   const { resource, save } = useReflections();
 
   async function saveAndDisplayStory(newStory) {
@@ -23,12 +20,8 @@ export default function ExquisiteStory() {
           <div className="text-lg max-w-prose mx-auto">
             {resource && (
               <>
-                <AddToStory
-                  slug={slug}
-                  story={resource}
-                  saveStory={saveAndDisplayStory}
-                />
-                <DisplayStory slug={slug} story={resource} />
+                <AddToStory story={resource} saveStory={saveAndDisplayStory} />
+                <DisplayStory story={resource} />
               </>
             )}
           </div>
