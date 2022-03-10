@@ -1,19 +1,16 @@
 import { useState, useCallback } from "react";
-import Link from "next/link";
 import Head from "next/head";
 import {
-  getLastLine,
   getMonetization,
   useRandomMonetization,
   addLine,
-  getLines,
   getContent,
-  useRandomStorySlug
+  useLines
 } from "../model/story";
 import { Formik, Form, useField } from "formik";
 import * as Yup from 'yup';
 import { MonetizationPicker, orgForPointer } from "./MonetizationPicker";
-import { useWebMonetization } from "../model/utils";
+import { getUUID, useWebMonetization } from "../model/utils";
 
 export function Input({
   className = "",
@@ -45,15 +42,14 @@ export function Input({
 
 const NewLineSchema = Yup.object().shape({
   line: Yup.string()
-    .min(140, "That's not enough to advance the story. Try writing more!")
-    .required(
-      "Even bad art is better than no art. Empty lines are not allowed."
-    )
-    .max(280, "That's too much! Leave some story for others!"),
+    .required("Let us know what you liked about MozFest in order to submit!")
+    .max(
+      280,
+      "Keep it brief! Submissions should be no longer than a Tweet (280 characters)"
+    ),
 });
 
 export function AddToStory({ story, saveStory }) {
-  const lastLine = getLastLine(story);
   const { isMonetizing } = useWebMonetization();
 
   const [monetization, setMonetization] = useState("");
@@ -66,11 +62,6 @@ export function AddToStory({ story, saveStory }) {
 
   return (
     <>
-      <h3 className="text-3xl mb-10">The story so far ends with:</h3>
-      <span className="mt-8 text-xl text-gray-700 leading-8">
-        &hellip; {getContent(lastLine)}
-      </span>
-
       <Formik
         initialValues={{ line: "" }}
         validationSchema={NewLineSchema}
@@ -82,7 +73,7 @@ export function AddToStory({ story, saveStory }) {
             name="line"
             id="line"
             className="block w-full border-0 text-xl mb-6 bg-transparent focus:ring-0 focus:shadow-none focus:outline-none focus:border-ocean"
-            placeholder="add the next line..."
+            placeholder="What was your favorite part of MozFest?"
           />
           <MonetizationPicker setMonetization={setMonetization} />
           <div className="h-20 flex flex-row justify-end items-center px-6">
@@ -108,9 +99,12 @@ export function AddToStory({ story, saveStory }) {
 export function DisplayLine({ line, selectedLine, textColor = "text-gray-700", onClick }) {
   const myTextColor = selectedLine === undefined ? textColor : (selectedLine === line ? textColor : 'text-gray-700')
   return (
-    <span className={`text-2xl ${myTextColor} font-[krete] leading-8 cursor-pointer`} onClick={(e) => onClick(e, line)}>
+    <div
+      className={`text-2xl mb-10 ${myTextColor} font-[krete] leading-8 cursor-pointer`}
+      onClick={(e) => onClick(e, line)}
+    >
       {getContent(line)}
-    </span>
+    </div>
   );
 }
 
@@ -127,17 +121,17 @@ function displayLineColor(i) {
   return displayLineColors[i % displayLineColors.length]
 }
 
-export function DisplayStory({ slug, story }) {
-  const nextStorySlug = useRandomStorySlug({ ignore: slug });
+export function DisplayStory({ story }) {
   const { isMonetizing } = useWebMonetization();
+  const lines = useLines(story);
 
   const randomMonetization = useRandomMonetization(story);
-  const [selectedLine, setSelectedLine] = useState()
+  const [selectedLine, setSelectedLine] = useState();
   const selectLine = useCallback(function (e, line) {
-    setSelectedLine(line)
-  })
-  const selectedMonetization = selectedLine && getMonetization(selectedLine)
-  const monetization = selectedMonetization || randomMonetization
+    setSelectedLine(line);
+  });
+  const selectedMonetization = selectedLine && getMonetization(selectedLine);
+  const monetization = selectedMonetization || randomMonetization;
   return (
     <>
       <Head>
@@ -145,10 +139,12 @@ export function DisplayStory({ slug, story }) {
           <meta name="monetization" content={monetization} key="monetization" />
         )}
       </Head>
-      <h3 className="text-4xl mb-10 text-center">The story so far!</h3>
+      <h3 className="text-4xl mb-10 text-center">
+        Here's what folks have been saying:
+      </h3>
       {!isMonetizing ? (
-        <h4 className="text-center mb-10">
-          Please enable Web Monetization to participate
+        <h4 className="text-center mb-10 my-4">
+          This page is not being monetized
         </h4>
       ) : (
         <>
@@ -158,32 +154,25 @@ export function DisplayStory({ slug, story }) {
           </h4>
           <p className="text-center mb-10">
             You can use your web monetization extension to send them a tip! If
-            you click a line below it will change who the page is monetized for,
-            and let you tip - try clicking your favorite line and sending some
-            cash to the very special organization chosen by the line's author!
+            you click a comment below it will change who the page is monetized
+            for, and let you tip - try clicking your favorite line and sending
+            some cash to the very special organization chosen by the line's
+            author!
           </p>
         </>
       )}
-      {getLines(story).map((line, i) => (
+      {lines.map((line, i) => (
         <>
           <DisplayLine
+            key={getUUID(line)}
+            id={getUUID(line)}
             line={line}
             selectedLine={selectedLine}
             textColor={displayLineColor(i)}
             onClick={selectLine}
           />
-          &nbsp;
         </>
       ))}
-      {nextStorySlug && (
-        <div className="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto text-right">
-          <h2>
-            <Link href={`/story/${nextStorySlug}`}>
-              <a>Join another Story</a>
-            </Link>
-          </h2>
-        </div>
-      )}
     </>
   );
 }

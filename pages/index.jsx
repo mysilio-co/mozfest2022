@@ -2,11 +2,9 @@ import Link from "next/link";
 import Head from "next/head";
 import { MysilioPointer } from "../components/MonetizationPicker";
 import { useWebMonetization } from "../model/utils";
-import { useRandomStorySlug } from "../model/story";
 
 export default function ExquisiteIntro() {
   const { isMonetizing } = useWebMonetization();
-  const slug = useRandomStorySlug();
 
   return (
     <main className="min-h-screen bg-gradient-to-r from-my-green via-ocean to-my-purple">
@@ -20,36 +18,25 @@ export default function ExquisiteIntro() {
               Mysilio Presents
             </span>
             <span className="mt-2 block text-3xl text-center leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-              Exquisite Garden
+              MozFest Reflections
             </span>
           </h1>
-          <p className="mt-8 text-xl text-gray-500 leading-8">
-            Welcome to Exquisite Garden, a Web Monetized, interactive exquisite
-            corpse game.&nbsp;
-            <a href="https://en.wikipedia.org/wiki/Exquisite_corpse">
-              Exquisite Corpse
-            </a>
-            &nbsp; is a game invented 100 years ago by the surrealist writer
-            Andre Breton, and has since grown to take a number of forms, like
-            this one.
-          </p>
         </div>
         <div className="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto">
-          <h2>How do I play?</h2>
-          <p>
+          <p className="mt-8 text-xl text-gray-500 leading-8">
+            Welcome to Reflections, a Web Monetized way to share your thoughts
+            on MozFest with the community. Participating is easy! Just&nbsp;
             {!isMonetizing ? (
-              <span>Click the link below to get started.</span>
+              <span>click the link below to get started.</span>
             ) : (
-              <Link href={`/story/${slug}`}>
-                <a>Click here to get started.</a>
+              <Link href="/reflect">
+                <a>click here to get started.</a>
               </Link>
             )}
-            &nbsp; You’ll be taken to a screen with one sentence, written by the
-            previous participant. Add on to the story by submitting a new piece
-            of text that furthers the narrative. After you’ve submitted your
-            next piece of writing, you’ll be able to view the entirety of the
-            story from all other participants (and tip the contributions you
-            love the most!).
+            &nbsp; You’ll be taken to a screen with a reflections written by
+            previous participants, as well as a form to submit your own
+            reflection. Don't forget to tip the contributions you love the
+            most!
           </p>
           <h2>Who built this?</h2>
           <p>
@@ -117,8 +104,8 @@ export default function ExquisiteIntro() {
               <h2>Please enable Web Monetization to participate</h2>
             ) : (
               <h2>
-                <Link href={`/story/${slug}`}>
-                  <a>Join the Story</a>
+                <Link href={`/reflect`}>
+                  <a>Add your reflection</a>
                 </Link>
               </h2>
             )}

@@ -1,23 +1,50 @@
-import { RDF } from "@inrupt/vocab-common-rdf";
-import { getUrlAll } from "@inrupt/solid-client";
+import { RDF, OWL } from "@inrupt/vocab-common-rdf";
+import * as uuid from "uuid";
+import { getUrlAll, createThing, asUrl } from "@inrupt/solid-client";
 import { useEffect, useMemo, useState, createContext, useContext } from "react";
-
-export function isLiteralTerm(s) {
-  return typeof s === "string" || s instanceof String;
-}
 
 export function hasRDFTypes(thing, ts) {
   const types = getUrlAll(thing, RDF.type);
   let hasAllTypes = true;
   for (let t of ts) {
-    const s = isLiteralTerm(t) ? t : t.value;
-    hasAllTypes = hasAllTypes && types.includes(s);
+    hasAllTypes = hasAllTypes && types.includes(asIriString(t));
   }
   return hasAllTypes;
 }
 
 export function hasRDFType(thing, t) {
   return hasRDFTypes(thing, [t]);
+}
+
+export function uuidUrn() {
+  // https://stackoverflow.com/questions/20342058/which-uuid-version-to-use
+  return `urn:uuid:${uuid.v4()}`;
+}
+
+export function asIriString(iri) {
+  return typeof iri === "string" ? iri : iri.value;
+}
+
+export function isUUID(iri) {
+  const url = new URL(asIriString(iri));
+  return (
+    url.protocol == "urn:" &&
+    url.pathname.indexOf("uuid:") == 0 &&
+    uuid.validate(url.pathname.substring(5))
+  );
+}
+
+export function getUUID(thing) {
+  const iri = asUrl(thing);
+  if (isUUID(asUrl(thing))) {
+    return iri;
+  } else {
+    return getUrlAll(thing, OWL.sameAs).find(isUUID);
+  }
+}
+
+export function createThingWithUUID() {
+  return createThing({ url: uuidUrn() });
 }
 
 export function useLocalStorage(key, initialValue) {
