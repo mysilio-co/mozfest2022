@@ -42,6 +42,7 @@ export function Input({
 
 const NewLineSchema = Yup.object().shape({
   line: Yup.string()
+    .min(140, "Please write a little more about what you liked about MozFest.")
     .required("Let us know what you liked about MozFest in order to submit!")
     .max(
       280,
